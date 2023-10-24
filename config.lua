@@ -5,6 +5,7 @@ Config.Debug = true --false on live server
 Config.TaxDay = 23 --This is the number day of each month that taxes will be collected on
 Config.TaxResetDay = 24 --This MUST be the day after TaxDay set above!!! (do not change either of these dates if the current date is one of the 2 for ex if its the 22 or 23rd day do not change these dates it will break the code)
 
+Config.useCharacterJob = true --if true players are employeed at a ranch via a characters.job if false players are employeed at a ranch via a character variable
 -- Set Language (Current Languages: "en_lang" English, "fr_lang" French, "de_lang" German, "pt_lang" Portuguese-Brazilian)
 Config.defaultlang = "de_lang"
 

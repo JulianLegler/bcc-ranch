@@ -24,8 +24,17 @@ end)
 
 --Check if player works at a ranch
 exports('DoesPlayerWorkAtRanch', function(charidentifier)
-    local param = { ['charid'] = charidentifier }
-    local result = MySQL.query.await("SELECT ranchid FROM characters WHERE charidentifier=@charid", param)
+    local character = VORPcore.getUser(_source).getUsedCharacter
+    local param = {}
+    local sqlString = ""
+    if Config.useCharacterJob then
+        param = { ['job'] = character.job }
+        sqlString = "SELECT ranchid FROM ranch WHERE job=@job"
+    else
+        param = { ['charid'] = charidentifier }
+        sqlString = "SELECT ranchid FROM ranch WHERE charidentifier=@charid"
+    end
+    local result = MySQL.query.await(sqlString, param)
     if #result > 0 then
         return true
     else

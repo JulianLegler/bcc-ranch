@@ -106,14 +106,16 @@ RegisterServerEvent('bcc-ranch:InsertCreatedRanchIntoDB',
             local create_ranch_query = "INSERT INTO ranch ( `charidentifier`,`ranchcoords`,`ranchname`,`ranch_radius_limit` ,`taxamount`) VALUES ( @charidentifier,@ranchcoords,@ranchname,@ranch_radius_limit,@taxamount )"
             local ranchid = MySQL.insert.await(create_ranch_query, param)
                 
-            -- Update owners ranchid in characters
-            local update_characters_query = "UPDATE characters SET ranchid=@ranchid WHERE charidentifier=@charidentifier"
-            local update_characters_param = {
-              ranchid = ranchid,
-              charidentifier = ownerStaticId
-            }
-            
-            MySQL.query.await(update_characters_query, update_characters_param)
+            if not Config.useCharacterJob then
+                -- Update owners ranchid in characters
+                local update_characters_query = "UPDATE characters SET ranchid=@ranchid WHERE charidentifier=@charidentifier"
+                local update_characters_param = {
+                    ranchid = ranchid,
+                    charidentifier = ownerStaticId
+                }
+                
+                MySQL.query.await(update_characters_query, update_characters_param)
+            end
             
             local character = VORPcore.getUser(_source).getUsedCharacter
             VORPcore.NotifyRightTip(_source, _U("RanchMade"), 4000)
@@ -273,8 +275,16 @@ AddEventHandler('bcc-ranch:CheckIfInRanch', function(employeeSource)
         _source = source
     end
     local character = VORPcore.getUser(_source).getUsedCharacter
-    local param = { ['charidentifier'] = character.charIdentifier }
-    local result = MySQL.query.await("SELECT ranchid FROM characters WHERE charidentifier=@charidentifier", param)
+    local param = {}
+    local sqlQuery = ""
+    if Config.useCharacterJob then
+        param = { ['job'] = character.job }
+        sqlQuery = "SELECT ranchid FROM ranch WHERE job=@job"
+    else
+        param = { ['charidentifier'] = character.charIdentifier }
+        sqlQuery = "SELECT ranchid FROM characters WHERE charidentifier=@charidentifier"
+    end
+    local result = MySQL.query.await(sqlQuery, param)
     if #result > 0 then
         if result[1].ranchid ~= nil and 0 then
             local ranchid = result[1].ranchid
@@ -869,12 +879,22 @@ RegisterServerEvent('bcc-ranch:ChoreCooldownSV', function(source,ranchId, feed, 
     end
 end)
 
+-- TODO: refactoring needed!
+-- Will reset isHerding to 0 if any player working at the ranch leaves the server even when others are still working.
 AddEventHandler('playerDropped', function()
     local character = VORPcore.getUser(source).getUsedCharacter
     local charid = character.charIdentifier
 
     local select_ranchid_param = { ['charid'] = charid }
-    local ranch = MySQL.query.await("SELECT ranchid FROM characters WHERE charidentifier=@charid", select_ranchid_param )
+    local sqlString = "SELECT ranchid FROM characters WHERE charidentifier=@charid"
+    if Config.useCharacterJob then
+        select_ranchid_param = { ['job'] = character.job }
+        sqlString = MySQL.query.await("SELECT ranchid FROM ranch WHERE job=@job", select_ranchid_param )
+    else
+
+    end
+
+    local ranch = MySQL.query.await(sqlString, select_ranchid_param )
 
     if ranch and #ranch > 0 and tonumber(ranch[1].ranchid) > 0 then
         local update_ranch_param = { ranchid = ranch[1].ranchid }
