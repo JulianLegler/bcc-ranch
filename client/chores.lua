@@ -74,11 +74,14 @@ RegisterNetEvent('bcc-ranch:ShovelHay', function(chore)
                                 TriggerServerEvent('bcc-ranch:AddItem', Config.ChoreConfig.ShovelPoop.RecievedItem, Config.ChoreConfig.ShovelPoop.RecievedAmount)
                             end
                             if chore == 'shovelhay' or chore == 'scooppoop' then --You have to do both chore == here otherwise this always triggers no matter what chore is
-                                playAnim('amb_work@world_human_farmer_rake@male_a@idle_a', 'idle_a', animTime)
+                                local animDict = 'amb_work@world_human_farmer_rake@male_a@idle_a'
+                                local animName = 'idle_a'
+                                playAnim(animDict, animName, -1)
                                 local rakeObj = CreateObject("p_rake02x", 0, 0, 0, true, true, false)
                                 AttachEntityToEntity(rakeObj, PlayerPedId(), GetEntityBoneIndexByName(PlayerPedId(), "PH_R_Hand"), 0.0, 0.0, 0.19, 0.0, 0.0, 0.0, false, false, true, false, 0, true, false, false)
                                 Wait(animTime)
                                 DeleteObject(rakeObj)
+                                StopAnimTask(PlayerPedId(), animDict, animName, 1.0)
                                 if PlayerDead then
                                     InMission = false
                                     VORPcore.NotifyRightTip(_U("PlayerDead"), 4000)
