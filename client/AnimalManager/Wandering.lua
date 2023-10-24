@@ -14,9 +14,11 @@ RegisterNetEvent('bcc-ranch:CowsWander', function()
             local pl = GetEntityCoords(PlayerPedId())
             local dist = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, spawnCoords.x, spawnCoords.y, spawnCoords.z, false)
             if dist > 400 and not deleted then
+                print("Cows are gone")
                 deleted = true
                 DelPedsForTable(cows)
             elseif dist < 400 and deleted then
+                print("Cows are back")
                 deleted = false
                 spawnWanderingAnimals('cows')
             end
@@ -107,7 +109,7 @@ function spawnWanderingAnimals(animalType)
                 repAmount = repAmount + 1
                 local createdPed = spawnpedsroam(spawnCoords, model, Config.RanchSetup.RanchAnimalSetup.Cows.RoamingRadius)
                 table.insert(cows, createdPed)
-            until repAmount == 5
+            until repAmount >= Config.RanchSetup.RanchAnimalSetup.Cows.AmountSpawned
         end,
         ['chickens'] = function()
             spawnCoords = Chickencoords -- added by Little Creek
@@ -116,7 +118,7 @@ function spawnWanderingAnimals(animalType)
                 repAmount = repAmount + 1
                 local createdPed = spawnpedsroam(spawnCoords, model, Config.RanchSetup.RanchAnimalSetup.Chickens.RoamingRadius)
                 table.insert(chickens, createdPed)
-            until repAmount == 5
+            until repAmount >= Config.RanchSetup.RanchAnimalSetup.Chickens.AmountSpawned
         end,
         ['goats'] = function()
             spawnCoords = Goatcoords -- added by Little Creek
@@ -125,7 +127,7 @@ function spawnWanderingAnimals(animalType)
                 repAmount = repAmount + 1
                 local createdPed = spawnpedsroam(spawnCoords, model, Config.RanchSetup.RanchAnimalSetup.Goats.RoamingRadius)
                 table.insert(goats, createdPed)
-            until repAmount == 5
+            until repAmount >= Config.RanchSetup.RanchAnimalSetup.Goats.AmountSpawned
         end,
         ['pigs'] = function()
             spawnCoords = Pigcoords -- added by Little Creek
@@ -134,7 +136,7 @@ function spawnWanderingAnimals(animalType)
                 repAmount = repAmount + 1
                 local createdPed = spawnpedsroam(spawnCoords, model, Config.RanchSetup.RanchAnimalSetup.Pigs.RoamingRadius)
                 table.insert(pigs, createdPed)
-            until repAmount == 5
+            until repAmount >= Config.RanchSetup.RanchAnimalSetup.Pigs.AmountSpawned
         end
     }
 

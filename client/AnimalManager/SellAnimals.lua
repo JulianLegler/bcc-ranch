@@ -109,13 +109,13 @@ function SellAnimals(animalType, animalCond)
                 pay = tables.LowPay
             end
             TriggerServerEvent('bcc-ranch:AnimalsSoldHandler', pay, animalType, RanchId)
-            VORPcore.NotifyRightTip(_U("AnimalsSold") .. tostring(pay), 4000) break
+            VORPcore.NotifyRightTip(_U("AnimalsSold") .. " " .. tostring(pay) .. "$", 4000) break
         elseif dist < 400 and doOnce == false then
             doOnce = true
             if Config.RanchSetup.WolfAttacks then
                 if math.random(1, 4) == 1 or 2 then
-                    createdPed = BccUtils.Ped.CreatePed('A_C_Wolf', plc.x + math.random(1, 10), plc.y + math.random(1, 10), plc.z, true, true, false)
-                    createdPed2 = BccUtils.Ped.CreatePed('A_C_Wolf', plc.x + math.random(1, 10), plc.y + math.random(1, 10), plc.z, true, true, false)
+                    createdPed = BccUtils.Ped.CreatePed('A_C_Wolf', plc.x + math.random(25, 50), plc.y + math.random(25, 50), plc.z, true, true, false)
+                    createdPed2 = BccUtils.Ped.CreatePed('A_C_Wolf', plc.x + math.random(25, 50), plc.y + math.random(25, 50), plc.z, true, true, false)
                     Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, createdPed)
                     Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, createdPed2)
                     TaskCombatPed(createdPed, PlayerPedId())

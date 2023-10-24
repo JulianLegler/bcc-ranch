@@ -444,14 +444,20 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                     end
                 end,
                 ['feedanimal'] = function()
-                    if FeedWagonLocation then
-                        TriggerServerEvent('bcc-ranch:CheckAnimalsOut', RanchId)
+                    print('feedanimal menu clicked')
 
+                    if FeedWagonLocation then
+
+                        TriggerServerEvent('bcc-ranch:CheckAnimalsOut', RanchId)
+                        print('feedanimal CheckAnimalsOut')
                         Wait(250)
+                        print('feedanimal IsAnimalOut has to be 0 after 250 ticks: ' .. IsAnimalOut)
                         if IsAnimalOut == 0 then
                             MenuData.CloseAll()
                             CanFeed = true
                         end
+                        print('feedanimal CanFeed should be true now: ' .. tostring(CanFeed))
+                        
                         local feedAnimalSelected = {
                             ['pigs'] = function()
                                 if Pigcoords ~= nil and Pigcoords ~= 'none' then

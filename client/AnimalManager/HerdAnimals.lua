@@ -77,7 +77,7 @@ function herdanimals(animalType, ranchCond)
                     local spawnCount = math.random(1, maxWolvesPerAttack)
                     local spawnedAmount = 0
                     repeat
-                        local createdPed1 = BccUtils.Ped.CreatePed('A_C_Wolf', plcw.x + math.random(1, 10), plcw.y + math.random(1, 10), plcw.z, true, true, false)
+                        local createdPed1 = BccUtils.Ped.CreatePed('A_C_Wolf', plcw.x + math.random(25, 50), plcw.y + math.random(25, 50), plcw.z, true, true, false)
                         Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, createdPed1)
                         TaskCombatPed(createdPed1, PlayerPedId())
                         spawnedAmount = spawnedAmount + 1

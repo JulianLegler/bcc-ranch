@@ -6,7 +6,7 @@ Config.TaxDay = 23 --This is the number day of each month that taxes will be col
 Config.TaxResetDay = 24 --This MUST be the day after TaxDay set above!!! (do not change either of these dates if the current date is one of the 2 for ex if its the 22 or 23rd day do not change these dates it will break the code)
 
 -- Set Language (Current Languages: "en_lang" English, "fr_lang" French, "de_lang" German, "pt_lang" Portuguese-Brazilian)
-Config.defaultlang = "en_lang"
+Config.defaultlang = "de_lang"
 
 --Webhok Setup
 Config.Webhooks = {
@@ -78,7 +78,7 @@ Config.ChoreConfig = {
         ConditionIncrease = 5,
     },
     RepairFeedTrough = {
-        AnimTime = 15000,
+        AnimTime = 20000,
         ConditionIncrease = 10,
     },
     ShovelPoop = {
@@ -111,14 +111,14 @@ Config.RanchSetup = {
     MaxRanchCondition = 100, --This is the maximum ranch condition possible. This can only be set upto 999
     BlipHash = 'blip_mp_roundup', --ranch blip hash
     HerdingMinDistance = 300, --this is the minimum distance a player will have to be from there ranch to set thier herd location
-    ChoreCooldown = 900, --seconds in between being able to do chores
-    FeedCooldown = 900, -- seconds in between being able to feed animals
+    ChoreCooldown = 10, --seconds in between being able to do chores
+    FeedCooldown = 10, -- seconds in between being able to feed animals
     RanchAnimalSetup = { --ranch animal setup
         Cows = {
             Health = 200, --How much health the cows will have while being herded or sold 
             AgeIncreaseTime = 60000, --The time that has to pass before the animals age increases
             AgeIncreaseAmount = 5, --the amount the age will increase
-            MilkingCooldown = 900, --time in seconds you have to  wait before being able to milk them again
+            MilkingCooldown = 9, --time in seconds you have to  wait before being able to milk them again
             MilkingItem = 'Ingredient_Milk', --item recieved after milking
             MilkingItemAmount = 5, --the amount of the item you get
             AmountToCollect = 0.70, --The minimum amount of milk you need to collect from the minigame to successfully milk the cow!
@@ -130,7 +130,7 @@ Config.RanchSetup = {
             BasePay = 800, --This is the base pay(what will be paid when selling the animal if animal condition is not max)
             MaxConditionPay = 1000, --amount to pay when selling the animal if the animals condition is maxed
             --
-            AmountSpawned = 9, --Amount of animals that will spawn when herding or selling them
+            AmountSpawned = 2, --Amount of animals that will spawn when herding or selling them
             FeedAnimalCondIncrease = 10, --how much the animal condition will go up after feeding them!
             CondIncreasePerHerd = 15, --this is the amount the animals condition will increase when successfully herded!
             CondIncreasePerHerdNotMaxRanchCond = 5, --this is the amount the animals condition will go up per herd if the ranchs condition is not max
@@ -157,7 +157,7 @@ Config.RanchSetup = {
             BasePay = 300,
             MaxConditionPay = 400,
             --
-            AmountSpawned = 4, --Amount of animals that will spawn when herding or selling them
+            AmountSpawned = 3, --Amount of animals that will spawn when herding or selling them
             FeedAnimalCondIncrease = 10, --how much the animal condition will go up after feeding them!
             CondIncreasePerHerd = 15, --this is the amount the animals condition will increase when successfully herded!
             CondIncreasePerHerdNotMaxRanchCond = 5, --this is the amount the animals condition will go up per herd if the ranchs condition is not max
@@ -184,7 +184,7 @@ Config.RanchSetup = {
             BasePay = 175,--This is the base pay(what will be paid when selling the animal if animal condition is not max)
             MaxConditionPay = 250,
             --
-            AmountSpawned = 4, --Amount of animals that will spawn when herding or selling them
+            AmountSpawned = 3, --Amount of animals that will spawn when herding or selling them
             FeedAnimalCondIncrease = 10, --how much the animal condition will go up after feeding them!
             CondIncreasePerHerd = 15, --this is the amount the animals condition will increase when successfully herded!
             CondIncreasePerHerdNotMaxRanchCond = 5, --this is the amount the animals condition will go up per herd if the ranchs condition is not max
@@ -215,7 +215,7 @@ Config.RanchSetup = {
             --
             RoamingRadius = 0.5,
             MaxCondition = 200,
-            AmountSpawned = 9, --Amount of animals that will spawn when herding or selling them
+            AmountSpawned = 4, --Amount of animals that will spawn when herding or selling them
             FeedAnimalCondIncrease = 10, --how much the animal condition will go up after feeding them!
             CondIncreasePerHerd = 15, --this is the amount the animals condition will increase when successfully herded!
             CondIncreasePerHerdNotMaxRanchCond = 5, --this is the amount the animals condition will go up per herd if the ranchs condition is not max
@@ -277,7 +277,7 @@ Config.SaleLocations = {
 ---------- Admin Configuration (Anyone listed here will be able to create and delete ranches!) -----------
 Config.AdminSteamIds = {
     {
-        steamid = 'steam:11000013707db22', --insert players steam id
+        steamid = 'steam:110000102cbb74c', --insert players steam id
     } --to add more just copy this table paste and change id
 }
 Config.CreateRanchCommand = 'createranch' --name of the command used to create ranches!
