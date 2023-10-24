@@ -102,11 +102,12 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
     while true do
         Wait(200)
         local pl = GetEntityCoords(vehicle)
-        local dist = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, RanchCoords.x, RanchCoords.y, RanchCoords.z, true)
-        if dist > 50 then
+        local distRanch = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, RanchCoords.x, RanchCoords.y, RanchCoords.z, false)
+        local distAnimalSpawn = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, spawnCoords.x, spawnCoords.y, spawnCoords.z, false)
+        if math.min(distRanch, distAnimalSpawn) > 50 then
             for k, v in pairs(feedPeds) do
                 local cp = GetEntityCoords(v)
-                if GetDistanceBetweenCoords(cp.x, cp.y, cp.z, pl.x, pl.y, pl.z, true) < 35 then
+                if GetDistanceBetweenCoords(cp.x, cp.y, cp.z, pl.x, pl.y, pl.z, true) < 10 then
                     animalsNear = true
                 else
                     animalsNear = false
