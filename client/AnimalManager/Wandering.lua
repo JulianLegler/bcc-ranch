@@ -99,6 +99,9 @@ RegisterNetEvent('bcc-ranch:PigsWander', function()
 end)
 
 function spawnWanderingAnimals(animalType)
+    if #cows > 0 and #chickens > 0 and #goats > 0 and #pigs > 0 then
+        return
+    end
     local repAmount = 0
 	local spawnCoords
     local selectedAnimal = {
@@ -155,7 +158,7 @@ function spawnpedsroam(coords, model, roamDist)
     end
     -- local spawnCoords = { x = RanchCoords.x + math.random(10, 20), y = RanchCoords.y + math.random(10, 30), z = RanchCoords.z }
     local spawnCoords = { x = coords.x + math.random(1, 5), y = coords.y + math.random(1, 5), z = coords.z } -- now spawning near their set location instead of the Ranch changed by Little Creek
-    local createdPed = CreatePed(model, spawnCoords.x, spawnCoords.y, spawnCoords.z, 50, true, false)
+    local createdPed = CreatePed(model, spawnCoords.x, spawnCoords.y, spawnCoords.z, 50, false, false)
     Citizen.InvokeNative(0x283978A15512B2FE, createdPed, true)
     Citizen.InvokeNative(0x9587913B9E772D29, createdPed, true)
     Citizen.InvokeNative(0xE054346CA3A0F315, createdPed, spawnCoords.x, spawnCoords.y, spawnCoords.z, roamDist, tonumber(1077936128), tonumber(1086324736), 1)

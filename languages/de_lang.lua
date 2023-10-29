@@ -120,7 +120,7 @@ Locales["de_lang"] = {
     OpenRanchInventory_desc = 'Schaue in das Lager der Ranch.',
 
     FeedAnimals = 'Vieh füttern',
-    FeedAnimals_desc = 'Füttere deine Tiere? Das wird sie zufrieden stellen.',
+    FeedAnimals_desc = 'Füttere deine Tiere? Das wird sie zufrieden stellen.\n Kühe: 2x Kuhfutter, Schweine: 2x Schweinefutter, Schaafe: 2x Apfel, Hühner: 2x Hühnerfutter',
     SetFeedWagonLocation = 'Setze Futterwagen Spawnpunkt',
     SetFeedWagonLocation_desc = 'Hier den Futterwagen spawnen lassen?',
 

@@ -102,7 +102,7 @@ function herdanimals(animalType, ranchCond)
         if catch == 0 or PlayerDead then break end
 
         local plc2 = GetEntityCoords(pl)
-        if GetDistanceBetweenCoords(plc2.x, plc2.y, plc2.z, Herdlocation.x, Herdlocation.y, Herdlocation.z, true) < 5 and animalsNear == true then
+        if GetDistanceBetweenCoords(plc2.x, plc2.y, plc2.z, Herdlocation.x, Herdlocation.y, Herdlocation.z, true) < 15 and animalsNear == true then
             animalsNear = false
             ClearGpsMultiRoute()
             VORPcore.NotifyRightTip(_U("ReturnAnimals"), 4000) break

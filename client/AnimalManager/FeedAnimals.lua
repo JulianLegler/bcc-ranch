@@ -3,6 +3,16 @@ local animalsDead, feedPeds = false, {}
 local crate, crate2, crate3
 local amount
 local vehicle
+
+local ClientRPC = exports.vorp_core:ClientRpcCall() --[[@as ClientRPC]] -- for intellisense
+
+local function isEnoughFoodInStorage(animalConfig)
+    local foodNeeded = animalConfig.FoodAmount
+    local item = animalConfig.FoodItem
+    local result = ClientRPC.Callback.TriggerAwait('bcc-ranch:removeFroodFromInventoryIfAvailable', item, foodNeeded)
+    return result
+end
+
 RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
     InMission = true
     local tables, model, spawnCoords, eatAnim
@@ -49,6 +59,12 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
     }
     if selectAnimalFuncts[animalType] then
         selectAnimalFuncts[animalType]()
+    end
+
+    if not isEnoughFoodInStorage(tables) then
+        VORPcore.NotifyRightTip(_U("FeedAnimalsNotEnoughFood"), 8000)
+        InMission = false
+        return
     end
 
     amount = tables.AmountSpawned
@@ -225,7 +241,7 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
         local cw = GetEntityCoords(vehicle)
         if PlayerDead then break end
         if GetEntityHealth(vehicle) == 0 then break end
-        if GetDistanceBetweenCoords(cw.x, cw.y, cw.z, FeedWagonLocation.x, FeedWagonLocation.y, FeedWagonLocation.z, true) < 15 then break end
+        if GetDistanceBetweenCoords(cw.x, cw.y, cw.z, FeedWagonLocation.x, FeedWagonLocation.y, FeedWagonLocation.z, true) < 6 then break end
     end
     ClearGpsMultiRoute()
     if PlayerDead == true or GetEntityHealth(vehicle) == 0 then
@@ -315,5 +331,7 @@ AddEventHandler('onResourceStop', function(resource)
         if DoesEntityExist(crate3) then
             DeleteEntity(crate3)
         end
+
+        ClearGpsMultiRoute()
     end
 end)

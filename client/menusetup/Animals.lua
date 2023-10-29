@@ -108,16 +108,23 @@ function ManageOwnedAnimalsMenu()
         set_or_change_feed_wagon = 'SetFeedWagonLocation'
         set_or_change_feed_wagon_desc = 'SetFeedWagonLocation_desc'
     end
-
+    -- bcc-ranch:AdminCheckRPC
+    local isAdmin = ClientRPC.Callback.TriggerAwait('bcc-ranch:AdminCheckRPC')
     local elements = {
-        { label = _U(set_or_change_herd),       value = 'setherdlocation',      desc = _U(set_or_change_herd_desc) },
-        { label = _U(set_or_change_feed_wagon), value = 'setfeedwagonlocation', desc = _U(set_or_change_feed_wagon_desc) },
         { label = _U('ManageCows'),             value = 'managecows',           desc = _U('ManageCows_desc') },
         { label = _U('ManagePigs'),             value = 'managepigs',           desc = _U('ManagePigs_desc') },
         { label = _U('ManageGoats'),            value = 'managegoats',          desc = _U('ManageGoats_desc') },
         { label = _U('ManageChickens'),         value = 'managechickens',       desc = _U('ManageChickens_desc') },
     }
     -- end added / changed by Little Creek
+
+    local herdingLocation = { label = _U(set_or_change_herd),       value = 'setherdlocation',      desc = _U(set_or_change_herd_desc) }
+    local feedWagonLocation = { label = _U(set_or_change_feed_wagon), value = 'setfeedwagonlocation', desc = _U(set_or_change_feed_wagon_desc) }
+
+    if isAdmin then
+        table.insert(elements, herdingLocation)
+        table.insert(elements, feedWagonLocation)
+    end
 
     MenuData.Open('default', GetCurrentResourceName(), 'menuapi',
         {
@@ -187,13 +194,18 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
 
             elements = {
                 { label = _U("CheckAnimalCond"), value = 'checkanimal',     desc = _U("CheckAnimalCond_desc") },
-                { label = _U(set_or_change),     value = 'setanimalcoords', desc = _U(set_or_change_desc) },
                 { label = _U("HerdAnimal"),      value = 'herdanimal',      desc = _U("HerdAnimal_desc") },
                 { label = _U("SellCows"),        value = 'sellanimal',      desc = _U("SellCows_desc") },
                 { label = _U("ButcherAnimal"),   value = 'butcheranimal',   desc = _U("ButcherAnimal_desc") },
                 { label = _U("FeedAnimals"),     value = 'feedanimal',      desc = _U("FeedAnimals_desc") },
             }
             -- end added / changed by Little Creek
+
+            local isAdmin = ClientRPC.Callback.TriggerAwait('bcc-ranch:AdminCheckRPC')
+            local setAnimalCoords = { label = _U(set_or_change),     value = 'setanimalcoords', desc = _U(set_or_change_desc) }
+            if isAdmin then
+                table.insert(elements, setAnimalCoords)
+            end
         end,
         ['goats'] = function()
             herdType = 'goats'
@@ -211,13 +223,18 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
 
             elements = {
                 { label = _U("CheckAnimalCond"), value = 'checkanimal',     desc = _U("CheckAnimalCond_desc") },
-                { label = _U(set_or_change),     value = 'setanimalcoords', desc = _U(set_or_change_desc) },
                 { label = _U("HerdAnimal"),      value = 'herdanimal',      desc = _U("HerdAnimal_desc") },
                 { label = _U("SellCows"),        value = 'sellanimal',      desc = _U("SellCows_desc") },
                 { label = _U("ButcherAnimal"),   value = 'butcheranimal',   desc = _U("ButcherAnimal_desc") },
                 { label = _U("FeedAnimals"),     value = 'feedanimal',      desc = _U("FeedAnimals_desc") },
             }
             -- end added / changed by Little Creek
+
+            local isAdmin = ClientRPC.Callback.TriggerAwait('bcc-ranch:AdminCheckRPC')
+            local setAnimalCoords = { label = _U(set_or_change),     value = 'setanimalcoords', desc = _U(set_or_change_desc) }
+            if isAdmin then
+                table.insert(elements, setAnimalCoords)
+            end
         end,
         ['chickens'] = function()
             herdType = 'chickens'
@@ -234,13 +251,19 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
             end
             elements = {
                 { label = _U("CheckAnimalCond"), value = 'checkanimal',     desc = _U("CheckAnimalCond_desc") },
-                { label = _U(set_or_change),     value = 'setanimalcoords', desc = _U(set_or_change_desc) },
                 { label = _U("HerdAnimal"),      value = 'herdanimal',      desc = _U("HerdAnimal_desc") },
                 { label = _U("SellCows"),        value = 'sellanimal',      desc = _U("SellCows_desc") },
                 { label = _U("ButcherAnimal"),   value = 'butcheranimal',   desc = _U("ButcherAnimal_desc") },
                 { label = _U("FeedAnimals"),     value = 'feedanimal',      desc = _U("FeedAnimals_desc") },
             }
             -- end added / changed by Little Creek
+
+            local isAdmin = ClientRPC.Callback.TriggerAwait('bcc-ranch:AdminCheckRPC')
+            local setAnimalCoords = { label = _U(set_or_change),     value = 'setanimalcoords', desc = _U(set_or_change_desc) }
+            if isAdmin then
+                table.insert(elements, setAnimalCoords)
+            end
+
             --This insert is done to hide the buying coop option or the harvest egg option depending on if you own a coop or not
             if ChickenCoop == 'none' then
                 table.insert(elements,
@@ -271,7 +294,6 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
 
             elements = {
                 { label = _U("CheckAnimalCond"), value = 'checkanimal',     desc = _U("CheckAnimalCond_desc") },
-                { label = _U(set_or_change),     value = 'setanimalcoords', desc = _U(set_or_change_desc) },
                 { label = _U("HerdAnimal"),      value = 'herdanimal',      desc = _U("HerdAnimal_desc") },
                 { label = _U("SellCows"),        value = 'sellanimal',      desc = _U("SellCows_desc") },
                 { label = _U("ButcherAnimal"),   value = 'butcheranimal',   desc = _U("ButcherAnimal_desc") },
@@ -279,6 +301,12 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                 { label = _U("milkCows"),        value = 'milkanimal',      desc = _U("milkCows_desc") },
             }
             -- end added / changed by Little Creek
+
+            local isAdmin = ClientRPC.Callback.TriggerAwait('bcc-ranch:AdminCheckRPC')
+            local setAnimalCoords = { label = _U(set_or_change),     value = 'setanimalcoords', desc = _U(set_or_change_desc) }
+            if isAdmin then
+                table.insert(elements, setAnimalCoords)
+            end
         end
     }
     if selectedElements[animalType] then
@@ -451,7 +479,7 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                         TriggerServerEvent('bcc-ranch:CheckAnimalsOut', RanchId)
                         print('feedanimal CheckAnimalsOut')
                         Wait(250)
-                        print('feedanimal IsAnimalOut has to be 0 after 250 ticks: ' .. IsAnimalOut)
+                        print('feedanimal IsAnimalOut has to be 0 after 250 ticks: ' .. tostring(IsAnimalOut))
                         if IsAnimalOut == 0 then
                             MenuData.CloseAll()
                             CanFeed = true

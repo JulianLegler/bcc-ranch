@@ -4,8 +4,10 @@ RegisterNetEvent('bcc-ranch:CowsAgeing', function(currAge)
     while BoughtCows do
         Cowsage = currAge
         if currAge >= Config.RanchSetup.AnimalGrownAge then break end
+        print('Triggered Aging function')
         Wait(Config.RanchSetup.RanchAnimalSetup.Cows.AgeIncreaseTime)
         currAge = currAge + Config.RanchSetup.RanchAnimalSetup.Cows.AgeIncreaseAmount
+        
         TriggerServerEvent('bcc-ranch:AgeIncrease', 'cows', RanchId)
     end
 end)

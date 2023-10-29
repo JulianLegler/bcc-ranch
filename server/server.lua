@@ -7,6 +7,8 @@ VORPInv = {}
 VORPInv = exports.vorp_inventory:vorp_inventoryApi()
 BccUtils = exports['bcc-utils'].initiate()
 
+ServerRPC = exports.vorp_core:ServerRpcCall() --[[@as ServerRPC]] -- for intellisense
+
 ------ Commands Admin Check --------
 RegisterServerEvent('bcc-ranch:AdminCheck', function(nextEvent, servEvent)
     local _source = source
@@ -22,7 +24,20 @@ RegisterServerEvent('bcc-ranch:AdminCheck', function(nextEvent, servEvent)
     end
 end)
 
+ServerRPC.Callback.Register('bcc-ranch:AdminCheckRPC', function(source, cb)
+    local _source = source
+    local character = VORPcore.getUser(_source).getUsedCharacter
+    for k, v in pairs(Config.AdminSteamIds) do
+        if character.identifier == v.steamid then
+            cb(true)
+            return
+        end
+    end
+    cb(false)
+end)
+
 CreateThread(function() --Tax handling
+    if not Config.UseTax then return end
     local date = os.date("%d")
     local result = MySQL.query.await("SELECT * FROM ranch")
     if tonumber(date) == tonumber(Config.TaxDay) then --for some reason these have to be tonumbered
@@ -757,6 +772,7 @@ AddEventHandler('bcc-ranch:IndAnimalAgeStart', function(animalType, _source)
 end)
 
 RegisterServerEvent('bcc-ranch:AgeIncrease', function(animalType, ranchid)
+    print('Age Increase')
     local ageIncFuncts = {
         ['cows'] = function()
             local param = {
@@ -889,15 +905,15 @@ AddEventHandler('playerDropped', function()
     local sqlString = "SELECT ranchid FROM characters WHERE charidentifier=@charid"
     if Config.useCharacterJob then
         select_ranchid_param = { ['job'] = character.job }
-        sqlString = MySQL.query.await("SELECT ranchid FROM ranch WHERE job=@job", select_ranchid_param )
-    else
-
+        sqlString = "SELECT ranchid FROM ranch WHERE job=@job"
     end
 
+    --print("select_ranchid_param: " .. tostring(select_ranchid_param) .. ": " .. json.encode(select_ranchid_param))
     local ranch = MySQL.query.await(sqlString, select_ranchid_param )
 
     if ranch and #ranch > 0 and tonumber(ranch[1].ranchid) > 0 then
         local update_ranch_param = { ranchid = ranch[1].ranchid }
+        --print("update_ranch_param: " .. update_ranch_param)
         MySQL.query.await("UPDATE ranch SET `isherding`=0 WHERE ranchid=@ranchid", update_ranch_param )
     end
 end)
@@ -911,4 +927,13 @@ AddEventHandler('onResourceStop', function(resourceName)
       return
     end
     exports.oxmysql:execute("UPDATE ranch SET isherding = 0")
+end)
+
+ServerRPC.Callback.Register('bcc-ranch:removeFroodFromInventoryIfAvailable', function(source, cb, foodItem, foodAmount)
+    local result = exports.vorp_inventory:subItem(source, foodItem, foodAmount, nil)
+    if not result then
+        cb(false)
+        return
+    end
+    cb(true)
 end)

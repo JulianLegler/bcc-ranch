@@ -11,14 +11,20 @@ AddEventHandler('vorp:SelectedCharacter', function()
     TriggerServerEvent('bcc-ranch:CheckIfInRanch')
 end)
 
+local function ranchStart()
+    local player = GetPlayerServerId(tonumber(PlayerId())) --credit vorp_admin
+    Wait(200)
+    TriggerServerEvent("bcc-ranch:getPlayersInfo", player) --credit vorp_admin
+    TriggerServerEvent('bcc-ranch:CheckIfRanchIsOwned')
+    TriggerServerEvent('bcc-ranch:CheckIfInRanch')
+end
+
+ranchStart()
+
 CreateThread(function()
     if Config.Debug then
         RegisterCommand('ranchstart', function()
-            local player = GetPlayerServerId(tonumber(PlayerId())) --credit vorp_admin
-            Wait(200)
-            TriggerServerEvent("bcc-ranch:getPlayersInfo", player) --credit vorp_admin
-            TriggerServerEvent('bcc-ranch:CheckIfRanchIsOwned')
-            TriggerServerEvent('bcc-ranch:CheckIfInRanch')
+           ranchStart()
         end)
     end
 end)

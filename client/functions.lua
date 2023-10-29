@@ -14,6 +14,8 @@ end)
 BccUtils = exports['bcc-utils'].initiate()
 MiniGame = exports['bcc-minigames'].initiate()
 
+ClientRPC = exports.vorp_core:ClientRpcCall() --[[@as ClientRPC]] -- for intellisense
+
 ----- Setting RelationShip ----
 function relationshipsetup(ped, relInt) --ped and player relationship setter, rail int is 1-5 1 being friend 5 being hate
   SetRelationshipBetweenGroups(relInt, GetPedRelationshipGroupHash(ped), joaat('PLAYER'))
@@ -33,7 +35,7 @@ function GetPlayers()
 end
 
 function DelPedsForTable(table) --will delete all peds in the table
-  for k, v in pairs(table) do
+  for k, v in pairs(table or {}) do
     DeletePed(v)
   end
 end

@@ -7,12 +7,11 @@ function MainMenu()
         { label = _U("CheckRanchCond"), value = 'checkranchcond', desc = _U("CheckRanchCond_desc") },
         { label = _U("Caretaking"),     value = 'caretaking',     desc = _U("Caretaking_desc") },
         { label = _U("ManageAnimals"),  value = 'manageanimals',  desc = _U("ManageAnimals_desc") },
-        { label = _U("Inventory"),      value = 'openinv',        desc = _U("Inventory_desc") },
+        --{ label = _U("Inventory"),      value = 'openinv',        desc = _U("Inventory_desc") },
     }
     if IsOwner then
         table.insert(elements, { label = _U("BuyAnimals"), value = 'buyanimals', desc = _U("BuyAnimals_desc") })
-        table.insert(elements,
-            { label = _U("ManageEmployee"), value = 'manageemployees', desc = _U("ManageEmployee_desc") })
+        --table.insert(elements, { label = _U("ManageEmployee"), value = 'manageemployees', desc = _U("ManageEmployee_desc") })
         table.insert(elements, { label = _U("Ledger"), value = 'ledger', desc = _U("Ledger") })
     end
 

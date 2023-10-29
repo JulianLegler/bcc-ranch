@@ -55,10 +55,10 @@ RegisterNetEvent('bcc-ranch:ShovelHay', function(chore)
         if PlayerDead then break end
         local plc = GetEntityCoords(PlayerPedId())
         local dist = GetDistanceBetweenCoords(plc.x, plc.y, plc.z, choreCoords.x, choreCoords.y, choreCoords.z, true)
-        if dist < 15 then
+        if dist < 30 then
             BccUtils.Misc.DrawText3D(choreCoords.x, choreCoords.y, choreCoords.z, _U("StartChore"))
         end
-        if dist < 5 then
+        if dist < 2 then
             if IsControlJustReleased(0, 0x760A9C6F) then
                 ClearGpsMultiRoute()
                 if Config.ChoreMinigames then
