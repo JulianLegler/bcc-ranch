@@ -24,7 +24,7 @@ function ButcherAnimals(animalType)
                 VORPcore.NotifyRightTip(_U("TooYoung"), 4000) return
             end
             tables = Config.RanchSetup.RanchAnimalSetup.Goats
-            model = 'a_c_goat_01'
+            model = 'A_C_Sheep_01'
             spawnCoords = Goatcoords
         end,
         ['pigs'] = function()

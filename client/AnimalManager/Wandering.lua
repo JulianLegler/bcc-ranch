@@ -125,7 +125,7 @@ function spawnWanderingAnimals(animalType)
         end,
         ['goats'] = function()
             spawnCoords = Goatcoords -- added by Little Creek
-            local model = joaat('a_c_goat_01')
+            local model = joaat('A_C_Sheep_01')
             repeat
                 repAmount = repAmount + 1
                 local createdPed = spawnpedsroam(spawnCoords, model, Config.RanchSetup.RanchAnimalSetup.Goats.RoamingRadius)

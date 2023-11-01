@@ -24,7 +24,7 @@ function herdanimals(animalType, ranchCond)
         end,
         ['goats'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Goats
-            model = 'a_c_goat_01'
+            model = 'A_C_Sheep_01'
             if Goatsage < Config.RanchSetup.AnimalGrownAge then
                 scale = 0.5
             end

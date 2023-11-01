@@ -30,7 +30,7 @@ function SellAnimals(animalType, animalCond)
                 VORPcore.NotifyRightTip(_U("TooYoung"), 4000)
             else
                 tables = Config.RanchSetup.RanchAnimalSetup.Goats
-                model = 'a_c_goat_01'
+                model = 'A_C_Sheep_01'
                 spawnCoords = Goatcoords
             end
         end,

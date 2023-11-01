@@ -40,7 +40,7 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
         end,
         ['goats'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Goats
-            model = 'a_c_goat_01'
+            model = 'A_C_Sheep_01'
             spawnCoords = Goatcoords
             eatAnim = joaat("PROP_ANIMAL_GOAT_EAT_TROUGH")
             if Goatsage < Config.RanchSetup.AnimalGrownAge then
