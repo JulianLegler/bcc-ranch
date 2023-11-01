@@ -53,8 +53,7 @@ RegisterNetEvent('bcc-ranch:HasRanchHandler', function(ranch)
     ScoopPoopCoords = json.decode(ranch.scooppoopcoords)
     -- end added by Little Creek
     Wait(200)
-    local blip = VORPutils.Blips:SetBlip(ranch.ranchname, Config.RanchSetup.BlipHash, 0.2, RanchCoords.x, RanchCoords.y,
-        RanchCoords.z)
+    -- local blip = VORPutils.Blips:SetBlip(ranch.ranchname, Config.RanchSetup.BlipHash, 0.2, RanchCoords.x, RanchCoords.y, RanchCoords.z)
     local PromptGroup = VORPutils.Prompts:SetupPromptGroup()
     local firstprompt = PromptGroup:RegisterPrompt(_U("OpenRanchMenu"), 0x760A9C6F, 1, 1, true, 'hold',
         { timedeventhash = "MEDIUM_TIMED_EVENT" })
@@ -99,8 +98,7 @@ end)
 ---- This Event Will Create The Sale Locations Blips and decrease the ranches cond over time -----
 AddEventHandler('bcc-ranch:StartCondDec', function()
     for k, v in pairs(Config.SaleLocations) do
-        local blip = VORPutils.Blips:SetBlip(v.LocationName, Config.SaleLocationBlipHash, 0.2, v.Coords.x, v.Coords.y,
-            v.Coords.z)
+        -- local blip = VORPutils.Blips:SetBlip(v.LocationName, Config.SaleLocationBlipHash, 0.2, v.Coords.x, v.Coords.y, v.Coords.z)
     end
     while true do
         Wait(Config.RanchSetup.RanchCondDecrease)

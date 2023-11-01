@@ -35,8 +35,7 @@ RegisterNetEvent('bcc-ranch:ChickenCoopHarvest', function()
     Citizen.InvokeNative(0x9587913B9E772D29, chickenCoop)
     VORPcore.NotifyRightTip(_U("HarvestEggs"), 4000)
     BccUtils.Misc.SetGps(ChickenCoop_coords.x, ChickenCoop_coords.y, ChickenCoop_coords.z)
-    local blip = VORPutils.Blips:SetBlip(_U("HarvestEggs_blip"), 'blip_teamsters', 0.2, ChickenCoop_coords.x,
-        ChickenCoop_coords.y, ChickenCoop_coords.z)
+    -- local blip = VORPutils.Blips:SetBlip(_U("HarvestEggs_blip"), 'blip_teamsters', 0.2, ChickenCoop_coords.x, ChickenCoop_coords.y, ChickenCoop_coords.z)
 
 
     local PromptGroup = VORPutils.Prompts:SetupPromptGroup()
@@ -56,12 +55,12 @@ RegisterNetEvent('bcc-ranch:ChickenCoopHarvest', function()
                                 Config.RanchSetup.RanchAnimalSetup.Chickens.EggItem_Amount)
                             VORPcore.NotifyRightTip(_U("HarvestedEggs"), 4000)
                             InMission = false
-                            VORPutils.Blips:RemoveBlip(blip.rawblip)
+                            -- VORPutils.Blips:RemoveBlip(blip.rawblip)
                             DeleteObject(chickenCoop)
                             return
                         else
                             InMission = false
-                            VORPutils.Blips:RemoveBlip(blip.rawblip)
+                            -- VORPutils.Blips:RemoveBlip(blip.rawblip)
                             DeleteObject(chickenCoop)
                             VORPcore.NotifyRightTip(_U("Failed"), 4000)
                             return
@@ -73,7 +72,7 @@ RegisterNetEvent('bcc-ranch:ChickenCoopHarvest', function()
                         Config.RanchSetup.RanchAnimalSetup.Chickens.EggItem_Amount)
                     VORPcore.NotifyRightTip(_U("HarvestedEggs"), 4000)
                     InMission = false
-                    VORPutils.Blips:RemoveBlip(blip.rawblip)
+                    -- VORPutils.Blips:RemoveBlip(blip.rawblip)
                     DeleteObject(chickenCoop)
                     break
                 end
