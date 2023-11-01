@@ -98,13 +98,13 @@ function SellAnimals(animalType, animalCond)
         local plc = GetEntityCoords(PlayerPedId())
         local dist = GetDistanceBetweenCoords(plc.x, plc.y, plc.z, finalSaleCoords.x, finalSaleCoords.y, finalSaleCoords.z, true)
         if dist < 5 and animalsNear == true then
-            local pay
-            if animalCond >= tables.MaxCondition and catch == tables.AmountSpawned then
-                pay = tables.MaxConditionPay
+            if animalCond > tables.MaxCondition then
+                animalCond = tables.MaxCondition
             end
-            if animalCond ~= tables.MaxCondition then
-                pay = tables.BasePay
-            end
+            local gradient = (tables.MaxConditionPay - tables.BasePay) / tables.MaxCondition
+            local pay = tables.BasePay + gradient * animalCond
+
+            -- Adjust for the case where catch is not equal to tables.AmountSpawned
             if catch ~= tables.AmountSpawned then
                 pay = tables.LowPay
             end
