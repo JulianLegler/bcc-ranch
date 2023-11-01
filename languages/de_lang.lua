@@ -91,8 +91,8 @@ Locales["de_lang"] = {
     ManageRanches_desc = 'Verwalte Spielerranches',
     Ranchid = 'Ranch ID ',
     Failed = 'Fehlgeschlagen!',
-    RepairTroughChore = "Repariere Futtertrug",
-    RepairFeedTrough_desc = 'Repariere Futtertrug? Das wird dein Vieh zufriedener machen.',
+    RepairTroughChore = "Reparieren",
+    RepairFeedTrough_desc = 'Reparieren? Das wird dein Vieh zufriedener machen.',
     ScoopPoopChore = 'Schaufel Mist',
     ScoopPoopChore_desc = 'Mist schaufeln? Das wird dein Vieh sehr zufrieden stellen.',
     
