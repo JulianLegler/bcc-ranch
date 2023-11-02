@@ -127,7 +127,7 @@ function herdanimals(animalType, ranchCond)
 
         local plc2 = GetEntityCoords(pl)
         if GetDistanceBetweenCoords(plc2.x, plc2.y, plc2.z, plc.x, plc.y, plc.z, true) < 5 and animalsNear == true then
-            if ranchCond ~= Config.RanchSetup.MaxRanchCondition and catch == tables.AmountSpawned then
+            if ranchCond >= Config.RanchSetup.MaxRanchCondition and catch == tables.AmountSpawned then
                 TriggerServerEvent('bcc-ranch:AnimalCondIncrease', animalType, tables.CondIncreasePerHerdNotMaxRanchCond, RanchId)
             else
                 TriggerServerEvent('bcc-ranch:AnimalCondIncrease', animalType, tables.CondIncreasePerHerd, RanchId)
