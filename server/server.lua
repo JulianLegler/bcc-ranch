@@ -870,7 +870,17 @@ RegisterServerEvent('bcc-ranch:ChoreCooldownSV', function(source,ranchId, feed, 
     local shopid = ranchId
     local cooldown
     if feed then
-        cooldown = Config.RanchSetup.FeedCooldown
+        if animal == 'cows' then
+            cooldown = Config.RanchSetup.RanchAnimalSetup.Cows.FeedCooldown or Config.RanchSetup.FeedCooldown
+        elseif animal == 'chickens' then
+            cooldown = Config.RanchSetup.RanchAnimalSetup.Chickens.FeedCooldown or Config.RanchSetup.FeedCooldown
+        elseif animal == 'goats' then
+            cooldown = Config.RanchSetup.RanchAnimalSetup.Goats.FeedCooldown or Config.RanchSetup.FeedCooldown
+        elseif animal == 'pigs' then
+            cooldown = Config.RanchSetup.RanchAnimalSetup.Pigs.FeedCooldown or Config.RanchSetup.FeedCooldown
+        else 
+            cooldown = Config.RanchSetup.FeedCooldown
+        end
     else
         cooldown = Config.RanchSetup.ChoreCooldown
     end
