@@ -97,7 +97,7 @@ function SellAnimals(animalType, animalCond)
 
         local plc = GetEntityCoords(PlayerPedId())
         local dist = GetDistanceBetweenCoords(plc.x, plc.y, plc.z, finalSaleCoords.x, finalSaleCoords.y, finalSaleCoords.z, true)
-        if dist < 5 and animalsNear == true then
+        if dist < 15 and animalsNear == true then
             if animalCond > tables.MaxCondition then
                 animalCond = tables.MaxCondition
             end
