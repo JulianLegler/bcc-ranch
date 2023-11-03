@@ -133,7 +133,7 @@ Config.RanchSetup = {
             BasePay = 200, --This is the base pay(what will be paid when selling the animal if animal condition is not max)
             MaxConditionPay = 250, --amount to pay when selling the animal if the animals condition is maxed
             --
-            AmountSpawned = 1, --Amount of animals that will spawn when herding or selling them
+            AmountSpawned = 4, --Amount of animals that will spawn when herding or selling them
             FeedCooldown = 10800, -- (3h) time in seconds you have to wait before being able to feed them again
             FeedAnimalCondIncrease = 15, --how much the animal condition will go up after feeding them!
             FoodAmount = 8, --amount of food the animals will eat per feeding
@@ -160,7 +160,7 @@ Config.RanchSetup = {
             BasePay = 150,
             MaxConditionPay = 175,
             --
-            AmountSpawned = 1, --Amount of animals that will spawn when herding or selling them
+            AmountSpawned = 4, --Amount of animals that will spawn when herding or selling them
             FeedCooldown = 3600, -- (1h) time in seconds you have to wait before being able to feed them again
             FeedAnimalCondIncrease = 15, --how much the animal condition will go up after feeding them!
             FoodAmount = 2, --amount of food the animals will eat per feeding
@@ -190,7 +190,7 @@ Config.RanchSetup = {
             BasePay = 150,--This is the base pay(what will be paid when selling the animal if animal condition is not max)
             MaxConditionPay = 175,
             --
-            AmountSpawned = 1, --Amount of animals that will spawn when herding or selling them
+            AmountSpawned = 4, --Amount of animals that will spawn when herding or selling them
             FeedCooldown = 10800, -- (1h) time in seconds you have to wait before being able to feed them again
             FeedAnimalCondIncrease = 15, --how much the animal condition will go up after feeding them!
             FoodAmount = 2, --amount of food the animals will eat per feeding
@@ -225,7 +225,7 @@ Config.RanchSetup = {
             --
             RoamingRadius = 4.0,
             MaxCondition = 200,
-            AmountSpawned = 1, --Amount of animals that will spawn when herding or selling them
+            AmountSpawned = 4, --Amount of animals that will spawn when herding or selling them
             FeedCooldown = 1800, -- (30min) time in seconds you have to wait before being able to feed them again
             FeedAnimalCondIncrease = 25, --how much the animal condition will go up after feeding them!
             FoodAmount = 8, --amount of food the animals will eat per feeding
