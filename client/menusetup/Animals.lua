@@ -121,8 +121,8 @@ function ManageOwnedAnimalsMenu()
     local herdingLocation = { label = _U(set_or_change_herd),       value = 'setherdlocation',      desc = _U(set_or_change_herd_desc) }
     local feedWagonLocation = { label = _U(set_or_change_feed_wagon), value = 'setfeedwagonlocation', desc = _U(set_or_change_feed_wagon_desc) }
 
+    table.insert(elements, herdingLocation)
     if isAdmin then
-        table.insert(elements, herdingLocation)
         table.insert(elements, feedWagonLocation)
     end
 
