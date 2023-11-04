@@ -24,7 +24,11 @@ ranchStart()
 CreateThread(function()
     if Config.Debug then
         RegisterCommand('ranchstart', function()
-           ranchStart()
+           --ranchStart()
+           --[[ TriggerServerEvent('bcc-ranch:WanderingSetup', 1)
+           TriggerServerEvent('bcc-ranch:WanderingSetup', 2)
+           TriggerServerEvent('bcc-ranch:WanderingSetup', 3)
+           TriggerServerEvent('bcc-ranch:WanderingSetup', 5) ]]
         end)
     end
 end)

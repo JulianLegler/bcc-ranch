@@ -719,16 +719,16 @@ RegisterServerEvent('bcc-ranch:WanderingSetup', function(ranchid)
         local result = MySQL.query.await("SELECT * FROM ranch WHERE ranchid=@ranchid", param)
         if #result > 0 then
             if result[1].cows == 'true' then
-                TriggerClientEvent('bcc-ranch:CowsWander', _source)
+                TriggerClientEvent('bcc-ranch:CowsWander', -1, result[1].ranchid, result[1].ranchcoords, result[1].cowcoords)
             end
             if result[1].chickens == 'true' then
-                TriggerClientEvent('bcc-ranch:ChickensWander', _source)
+                TriggerClientEvent('bcc-ranch:ChickensWander', -1, result[1].ranchid, result[1].ranchcoords, result[1].chickencoords)
             end
             if result[1].goats == 'true' then
-                TriggerClientEvent("bcc-ranch:GoatsWander", _source)
+                TriggerClientEvent("bcc-ranch:GoatsWander", -1, result[1].ranchid, result[1].ranchcoords, result[1].goatcoords)
             end
             if result[1].pigs == 'true' then
-                TriggerClientEvent("bcc-ranch:PigsWander", _source)
+                TriggerClientEvent("bcc-ranch:PigsWander", -1, result[1].ranchid, result[1].ranchcoords, result[1].pigcoords)
             end
         end
         table.insert(wanderingBools, { ranchId = ranchid, status = true })

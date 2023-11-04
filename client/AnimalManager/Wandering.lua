@@ -1,144 +1,167 @@
 ------------ Animals Wandering Setup --------------
 local cows, chickens, goats, pigs = {}, {}, {}, {}
-RegisterNetEvent('bcc-ranch:CowsWander', function()
-    local deleted = false
+
+
+
+RegisterNetEvent('bcc-ranch:CowsWander', function(ranchId, ranchCoords, animalCoords)
+    --print("CowsWander for " .. ranchId)
+    --print(json.encode(ranchCoords))
+    --print(json.encode(animalCoords))
+    local ranchCoords = json.decode(ranchCoords)
+    local animalCoords = json.decode(animalCoords)
+    --print("CowsWander ranchCoords: " .. ranchCoords.x .. ", " .. ranchCoords.y .. ", " .. ranchCoords.z)
+    --print("CowsWander animalCoords: " .. animalCoords.x .. ", " .. animalCoords.y .. ", " .. animalCoords.z)
+    if not cows[ranchId] then
+        cows[ranchId] = {}
+    end
+    local deleted = true
 	local spawnCoords -- added by Little Creek
-	spawnCoords = Cowcoords -- added by Little Creek
+	spawnCoords = animalCoords -- added by Little Creek
     if spawnCoords == nil then
-        spawnCoords = RanchCoords
+        spawnCoords = ranchCoords
     end
     if spawnCoords ~= 'none' then
-        spawnWanderingAnimals('cows')
+        -- spawnWanderingAnimals('cows')
         while true do
-            Wait(2000)
+            --print("CowsWander loop for " .. ranchId)
+            --print("CowsWander loop spawnCoords: " .. spawnCoords.x .. ", " .. spawnCoords.y .. ", " .. spawnCoords.z)
             local pl = GetEntityCoords(PlayerPedId())
             local dist = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, spawnCoords.x, spawnCoords.y, spawnCoords.z, false)
-            if dist > 400 and not deleted then
+            --print("CowsWander loop dist: " .. dist)
+            --print("CowsWander loop deleted: " .. tostring(deleted))
+            if dist > 250 and not deleted then
                 print("Cows are gone")
                 deleted = true
-                DelPedsForTable(cows)
-            elseif dist < 400 and deleted then
+                DelPedsForTable(cows[ranchId])
+            elseif dist <= 250 and deleted then
                 print("Cows are back")
                 deleted = false
-                spawnWanderingAnimals('cows')
+                spawnWanderingAnimals('cows', ranchId, animalCoords)
             end
+            Wait(10000)
         end
     end
 end)
 
-RegisterNetEvent('bcc-ranch:ChickensWander', function()
-    local deleted = false
+RegisterNetEvent('bcc-ranch:ChickensWander', function(ranchId, ranchCoords, animalCoords)
+    if not chickens[ranchId] then
+        chickens[ranchId] = {}
+    end
+    local deleted = true
 	local spawnCoords -- added by Little Creek
-	spawnCoords = Chickencoords -- added by Little Creek
+	spawnCoords = animalCoords -- added by Little Creek
     if spawnCoords == nil then
-        spawnCoords = RanchCoords
+        spawnCoords = ranchCoords
     end
     if spawnCoords ~= 'none' then
-        spawnWanderingAnimals('chickens')
         while true do
-            Wait(2000)
             local pl = GetEntityCoords(PlayerPedId())
             local dist = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, spawnCoords.x, spawnCoords.y, spawnCoords.z, false)
-            if dist > 400 and not deleted then
+            if dist > 250 and not deleted then
                 deleted = true
-                DelPedsForTable(chickens)
-            elseif dist < 400 and deleted then
+                DelPedsForTable(chickens[ranchId])
+            elseif dist <= 250 and deleted then
                 deleted = false
-                spawnWanderingAnimals('chickens')
+                spawnWanderingAnimals('chickens', ranchId, animalCoords)
             end
+            Wait(10000)
         end
     end
 end)
 
-RegisterNetEvent('bcc-ranch:GoatsWander', function()
-    local deleted = false
+RegisterNetEvent('bcc-ranch:GoatsWander', function(ranchId, ranchCoords, animalCoords)
+    if not goats[ranchId] then
+        goats[ranchId] = {}
+    end
+    local deleted = true
 	local spawnCoords -- added by Little Creek
-	spawnCoords = Goatcoords -- added by Little Creek
+	spawnCoords = animalCoords -- added by Little Creek
     if spawnCoords == nil then
-        spawnCoords = RanchCoords
+        spawnCoords = ranchCoords
     end
     if spawnCoords ~= 'none' then
-        spawnWanderingAnimals('goats')
         while true do
-            Wait(2000)
             local pl = GetEntityCoords(PlayerPedId())
             local dist = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, spawnCoords.x, spawnCoords.y, spawnCoords.z, false)
-            if dist > 400 and not deleted then
+            if dist > 250 and not deleted then
                 deleted = true
-                DelPedsForTable(goats)
-            elseif dist < 400 and deleted then
+                DelPedsForTable(goats[ranchId])
+            elseif dist <= 250 and deleted then
                 deleted = false
-                spawnWanderingAnimals('goats')
+                spawnWanderingAnimals('goats', ranchId, animalCoords)
             end
+            Wait(10000)
         end
     end
 end)
 
-RegisterNetEvent('bcc-ranch:PigsWander', function()
-    local deleted = false
+RegisterNetEvent('bcc-ranch:PigsWander', function(ranchId, ranchCoords, animalCoords)
+    if not pigs[ranchId] then
+        pigs[ranchId] = {}
+    end
+    local deleted = true
 	local spawnCoords -- added by Little Creek
-	spawnCoords = Pigcoords -- added by Little Creek
+	spawnCoords = animalCoords -- added by Little Creek
     if spawnCoords == nil then
-        spawnCoords = RanchCoords
+        spawnCoords = ranchCoords
     end
     if spawnCoords ~= 'none' then
-        spawnWanderingAnimals('pigs')
         while true do
-            Wait(2000)
             local pl = GetEntityCoords(PlayerPedId())
             local dist = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, spawnCoords.x, spawnCoords.y, spawnCoords.z, false)
-            if dist > 400 and not deleted then
+            if dist > 250 and not deleted then
                 deleted = true
-                DelPedsForTable(pigs)
-            elseif dist < 400 and deleted then
+                DelPedsForTable(pigs[ranchId])
+            elseif dist <= 250 and deleted then
                 deleted = false
-                spawnWanderingAnimals('pigs')
+                spawnWanderingAnimals('pigs', ranchId, animalCoords)
             end
+            Wait(10000)
         end
     end
 end)
 
-function spawnWanderingAnimals(animalType)
-    if #cows > 0 and #chickens > 0 and #goats > 0 and #pigs > 0 then
+function spawnWanderingAnimals(animalType, ranchId, animalCoords)
+    if #cows[ranchId] > 0 and #chickens[ranchId] > 0 and #goats[ranchId] > 0 and #pigs[ranchId] > 0 then
         return
     end
     local repAmount = 0
 	local spawnCoords
     local selectedAnimal = {
         ['cows'] = function()
-            spawnCoords = Cowcoords -- added by Little Creek
+            spawnCoords = animalCoords -- added by Little Creek
             local model = joaat('a_c_cow')
             repeat
                 repAmount = repAmount + 1
                 local createdPed = spawnpedsroam(spawnCoords, model, Config.RanchSetup.RanchAnimalSetup.Cows.RoamingRadius)
-                table.insert(cows, createdPed)
+                table.insert(cows[ranchId], createdPed)
             until repAmount >= Config.RanchSetup.RanchAnimalSetup.Cows.AmountSpawned
         end,
         ['chickens'] = function()
-            spawnCoords = Chickencoords -- added by Little Creek
+            spawnCoords = animalCoords -- added by Little Creek
             local model = joaat('a_c_chicken_01')
             repeat
                 repAmount = repAmount + 1
                 local createdPed = spawnpedsroam(spawnCoords, model, Config.RanchSetup.RanchAnimalSetup.Chickens.RoamingRadius)
-                table.insert(chickens, createdPed)
+                table.insert(chickens[ranchId], createdPed)
             until repAmount >= Config.RanchSetup.RanchAnimalSetup.Chickens.AmountSpawned
         end,
         ['goats'] = function()
-            spawnCoords = Goatcoords -- added by Little Creek
+            spawnCoords = animalCoords -- added by Little Creek
             local model = joaat('A_C_Sheep_01')
             repeat
                 repAmount = repAmount + 1
                 local createdPed = spawnpedsroam(spawnCoords, model, Config.RanchSetup.RanchAnimalSetup.Goats.RoamingRadius)
-                table.insert(goats, createdPed)
+                table.insert(goats[ranchId], createdPed)
             until repAmount >= Config.RanchSetup.RanchAnimalSetup.Goats.AmountSpawned
         end,
         ['pigs'] = function()
-            spawnCoords = Pigcoords -- added by Little Creek
+            spawnCoords = animalCoords -- added by Little Creek
             local model = joaat('a_c_pig_01')
             repeat
                 repAmount = repAmount + 1
                 local createdPed = spawnpedsroam(spawnCoords, model, Config.RanchSetup.RanchAnimalSetup.Pigs.RoamingRadius)
-                table.insert(pigs, createdPed)
+                table.insert(pigs[ranchId], createdPed)
             until repAmount >= Config.RanchSetup.RanchAnimalSetup.Pigs.AmountSpawned
         end
     }
@@ -171,8 +194,18 @@ AddEventHandler('onResourceStop', function(resourceName)
     if (GetCurrentResourceName() ~= resourceName) then
       return
     end
-    DelPedsForTable(cows)
-    DelPedsForTable(chickens)
-    DelPedsForTable(goats)
-    DelPedsForTable(pigs)
+    for k, v in pairs(cows) do
+        DelPedsForTable(v)
+    end
+    for k, v in pairs(chickens) do
+        DelPedsForTable(v)
+    end
+    for k, v in pairs(goats) do
+        DelPedsForTable(v)
+    end
+    for k, v in pairs(pigs) do
+        DelPedsForTable(v)
+    end
+
+    
   end)

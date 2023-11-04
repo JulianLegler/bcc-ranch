@@ -36,7 +36,9 @@ end
 
 function DelPedsForTable(table) --will delete all peds in the table
   for k, v in pairs(table or {}) do
-    DeletePed(v)
+    if DoesEntityExist(v) then
+      DeletePed(v)
+    end
   end
 end
 
