@@ -713,8 +713,11 @@ RegisterServerEvent('bcc-ranch:WanderingSetup', function(ranchid)
         end
     end
 
+    print(string.format("alreadySpawned: %s for ranchid: %s", alreadySpawned, ranchid))
+
     if not alreadySpawned then
         local param = { ['ranchid'] = ranchid }
+        table.insert(wanderingBools, { ranchId = ranchid, status = true })
         local _source = source
         local result = MySQL.query.await("SELECT * FROM ranch WHERE ranchid=@ranchid", param)
         if #result > 0 then
@@ -731,7 +734,6 @@ RegisterServerEvent('bcc-ranch:WanderingSetup', function(ranchid)
                 TriggerClientEvent("bcc-ranch:PigsWander", -1, result[1].ranchid, result[1].ranchcoords, result[1].pigcoords)
             end
         end
-        table.insert(wanderingBools, { ranchId = ranchid, status = true })
     end
 end)
 

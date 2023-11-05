@@ -58,9 +58,11 @@ RegisterNetEvent('bcc-ranch:ChickensWander', function(ranchId, ranchCoords, anim
             local pl = GetEntityCoords(PlayerPedId())
             local dist = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, spawnCoords.x, spawnCoords.y, spawnCoords.z, false)
             if dist > 250 and not deleted then
+                print("Chickens are gone")
                 deleted = true
                 DelPedsForTable(chickens[ranchId])
             elseif dist <= 250 and deleted then
+                print("Chickens are back")
                 deleted = false
                 spawnWanderingAnimals('chickens', ranchId, animalCoords)
             end
@@ -84,9 +86,11 @@ RegisterNetEvent('bcc-ranch:GoatsWander', function(ranchId, ranchCoords, animalC
             local pl = GetEntityCoords(PlayerPedId())
             local dist = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, spawnCoords.x, spawnCoords.y, spawnCoords.z, false)
             if dist > 250 and not deleted then
+                print("Goats are gone")
                 deleted = true
                 DelPedsForTable(goats[ranchId])
             elseif dist <= 250 and deleted then
+                print("Goats are back")
                 deleted = false
                 spawnWanderingAnimals('goats', ranchId, animalCoords)
             end
@@ -110,9 +114,11 @@ RegisterNetEvent('bcc-ranch:PigsWander', function(ranchId, ranchCoords, animalCo
             local pl = GetEntityCoords(PlayerPedId())
             local dist = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, spawnCoords.x, spawnCoords.y, spawnCoords.z, false)
             if dist > 250 and not deleted then
+                print("Pigs are gone")
                 deleted = true
                 DelPedsForTable(pigs[ranchId])
             elseif dist <= 250 and deleted then
+                print("Pigs are back")
                 deleted = false
                 spawnWanderingAnimals('pigs', ranchId, animalCoords)
             end
