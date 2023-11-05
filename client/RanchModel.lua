@@ -14,6 +14,10 @@
 ---@field chickencoords table
 ---@field goatcoords table
 ---@field isherding boolean
+---@field cows_age number
+---@field pigs_age number
+---@field chickens_age number
+---@field goats_age number
 ---@field wanderingAnimals table[]
 
 RanchModel = {}
@@ -52,6 +56,10 @@ function RanchModel.initFromRanchDataModel(ranchDataModel)
     self.chickencoords = ranchDataModel.chickencoords or self.ranchcoords
     self.goatcoords = ranchDataModel.goatcoords or self.ranchcoords
     self.isherding = ranchDataModel.isherding
+    self.cows_age = ranchDataModel.cows_age
+    self.pigs_age = ranchDataModel.pigs_age
+    self.chickens_age = ranchDataModel.chickens_age
+    self.goats_age = ranchDataModel.goats_age
     return self
 end
 
@@ -76,6 +84,10 @@ function RanchModel:updateFromServer()
     self.chickencoords = rpcCallResult.chickencoords
     self.goatcoords = rpcCallResult.goatcoords
     self.isherding = rpcCallResult.isherding
+    self.cows_age = rpcCallResult.cows_age
+    self.pigs_age = rpcCallResult.pigs_age
+    self.chickens_age = rpcCallResult.chickens_age
+    self.goats_age = rpcCallResult.goats_age
     return true
 end
 
@@ -94,6 +106,10 @@ function RanchModel:updateFromRanchDataModel(ranchDataModel)
     self.chickencoords = ranchDataModel.chickencoords
     self.goatcoords = ranchDataModel.goatcoords
     self.isherding = ranchDataModel.isherding
+    self.cows_age = ranchDataModel.cows_age
+    self.pigs_age = ranchDataModel.pigs_age
+    self.chickens_age = ranchDataModel.chickens_age
+    self.goats_age = ranchDataModel.goats_age
 end
 
 function RanchModel:addWanderingAnimalHandler(animalType, pedHandler)

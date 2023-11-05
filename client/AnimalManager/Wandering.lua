@@ -2,6 +2,8 @@
 local cows, chickens, goats, pigs = {}, {}, {}, {}
 local waitTicksBetweenWanderingDistanceChecks = 10000
 local spawnDistanceForWanderingAnimals = 250
+local maxPedScale = 1.2
+local minPedScale = 0.7
 
 local handleWanderingAnimals
 local despawnWanderingAnimals
@@ -65,23 +67,36 @@ spawnWanderingAnimals = function(animalType, ranch)
     end
     local numberAnimalsSpawned = 0
     local animalSpawn = ranch.ranchcoords
+    local animalAge = 0
     if animalType == 'Cows' then
         animalSpawn = ranch.cowcoords
+        animalAge = ranch.cows_age
     elseif animalType == 'Chickens' then
         animalSpawn = ranch.chickencoords
+        animalAge = ranch.chickens_age
     elseif animalType == 'Goats' then
         animalSpawn = ranch.goatcoords
+        animalAge = ranch.goats_age
     elseif animalType == 'Pigs' then
         animalSpawn = ranch.pigcoords
+        animalAge = ranch.pigs_age
     end
+
+    if animalAge > Config.RanchSetup.AnimalGrownAge then
+        animalAge = Config.RanchSetup.AnimalGrownAge
+    end
+ 
+    local gradient = (maxPedScale - minPedScale) / Config.RanchSetup.AnimalGrownAge
+    local animalSize = minPedScale + gradient * animalAge
+
     repeat
-        local createdPed = spawnRoamingPed(animalSpawn, Config.RanchSetup.RanchAnimalSetup[animalType].Model, Config.RanchSetup.RanchAnimalSetup[animalType].RoamingRadius)
+        local createdPed = spawnRoamingPed(animalSpawn, Config.RanchSetup.RanchAnimalSetup[animalType].Model, Config.RanchSetup.RanchAnimalSetup[animalType].RoamingRadius, animalSize)
         ranch:addWanderingAnimalHandler(animalType, createdPed)
         numberAnimalsSpawned = numberAnimalsSpawned + 1
     until numberAnimalsSpawned >= Config.RanchSetup.RanchAnimalSetup[animalType].AmountSpawned
 end
 
-spawnRoamingPed = function(coords, model, roamDist)
+spawnRoamingPed = function(coords, model, roamDist, size)
     if coords == nil then
         coords = RanchCoords
     end
@@ -95,6 +110,7 @@ spawnRoamingPed = function(coords, model, roamDist)
     Citizen.InvokeNative(0x283978A15512B2FE, createdPed, true)
     Citizen.InvokeNative(0x9587913B9E772D29, createdPed, true)
     Citizen.InvokeNative(0xE054346CA3A0F315, createdPed, spawnCoords.x, spawnCoords.y, spawnCoords.z, roamDist, tonumber(1077936128), tonumber(1086324736), 1)
+    SetPedScale(createdPed, size)
     relationshipsetup(createdPed, 1)
     SetBlockingOfNonTemporaryEvents(createdPed, true)
     return createdPed
