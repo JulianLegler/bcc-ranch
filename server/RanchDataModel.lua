@@ -33,6 +33,7 @@
 ---@field isherding number
 ---@field job string
 
+
 RanchDataModel = {}
 RanchDataModel.__index = RanchDataModel
 
@@ -86,7 +87,7 @@ AUTO_INCREMENT=6
 
 --- RanchDataModel.get - Get a RanchDataModel object from the database
 ---@param ranchid number - The ranchid of the ranch to get
----@return nil|RanchDataModel
+---@return RanchDataModel|nil - The RanchDataModel object or nil if not found
 function RanchDataModel.get(ranchid)
     local self = setmetatable({}, RanchDataModel)
     self.ranchid = ranchid
@@ -178,23 +179,21 @@ function handleBoolean(value)
     return false
 end
 
-ServerRPC.Callback.Register('bcc-ranch:getRanchData', function(source, cb, ranchid)
-    local ranch = RanchDataModel.get(ranchid)
-    if not ranch then
-        cb(false)
-        return
+--- changes the animal owned state for the ranch in the db
+---@param animalType string
+---@param state string - 'true' or 'false'
+---@return boolean - true if successful, false if not
+function RanchDataModel:setAnimalOwnedState(animalType, state)
+    local result = MySQL.Sync.execute("UPDATE ranch SET " .. animalType .. " = @state WHERE ranchid = @ranchid", {['@state'] = state, ['@ranchid'] = self.ranchid})
+    if result == 0 then
+        print(string.format("RanchDataModel:setAnimalOwnedState() - Failed to update %s state for ranch with ranchid %s", animalType, self.ranchid))
+        return false
     end
-    cb(ranch)
-end)
+    self[animalType] = handleBoolean(state)
+    print(string.format("RanchDataModel:setAnimalOwnedState() - Updated %s state for ranch with ranchid %s", animalType, self.ranchid))
+    ServerRPC.Callback.TriggerAsync('bcc-ranch:ranchDataChanged', -1, function () end, self)
+    return true
+end
 
-ServerRPC.Callback.Register('bcc-ranch:getAllRanchData', function(source, cb)
-    local ranches = {}
-    local ranchids = MySQL.Sync.fetchAll("SELECT ranchid FROM ranch")
-    for _, ranchid in pairs(ranchids or {}) do
-        local ranch = RanchDataModel.get(ranchid.ranchid)
-        if ranch then
-            table.insert(ranches, ranch)
-        end
-    end
-    cb(ranches)
-end)
+
+

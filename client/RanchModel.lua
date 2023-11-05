@@ -79,6 +79,23 @@ function RanchModel:updateFromServer()
     return true
 end
 
+function RanchModel:updateFromRanchDataModel(ranchDataModel)
+    self.charidentifier = ranchDataModel.charidentifier
+    self.ranchcoords = ranchDataModel.ranchcoords
+    self.ranchname = ranchDataModel.ranchname
+    self.ranch_radius_limit = ranchDataModel.ranch_radius_limit
+    self.ranchCondition = ranchDataModel.ranchCondition
+    self.cows = ranchDataModel.cows
+    self.pigs = ranchDataModel.pigs
+    self.chickens = ranchDataModel.chickens
+    self.goats = ranchDataModel.goats
+    self.cowcoords = ranchDataModel.cowcoords
+    self.pigcoords = ranchDataModel.pigcoords
+    self.chickencoords = ranchDataModel.chickencoords
+    self.goatcoords = ranchDataModel.goatcoords
+    self.isherding = ranchDataModel.isherding
+end
+
 function RanchModel:addWanderingAnimalHandler(animalType, pedHandler)
     self.wanderingAnimals = self.wanderingAnimals or {}
     if not self.wanderingAnimals[animalType] then

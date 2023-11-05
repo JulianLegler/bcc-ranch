@@ -9,6 +9,15 @@ BccUtils = exports['bcc-utils'].initiate()
 
 ServerRPC = exports.vorp_core:ServerRpcCall() --[[@as ServerRPC]] -- for intellisense
 
+ServerRanchControllerInstance = nil --[[@type ServerRanchController]]
+
+Citizen.CreateThread(function()
+    while not ServerRanchControllerInstance do
+        ServerRanchControllerInstance = ServerRanchController.new()
+        Wait(2000)
+    end
+end)
+
 ------ Commands Admin Check --------
 RegisterServerEvent('bcc-ranch:AdminCheck', function(nextEvent, servEvent)
     local _source = source
@@ -392,7 +401,16 @@ RegisterServerEvent('bcc-ranch:BuyAnimals', function(ranchid, animalType)
                 if #result > 0 then
                     if result[1].cows == 'false' then
                         TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'cows', _source)
-                        exports.oxmysql:execute('UPDATE ranch SET `cows`="true" WHERE ranchid=@ranchid', param)
+                        local ranch = ServerRanchControllerInstance:getRanch(ranchid)
+                        if not ranch then
+                            VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
+                            return
+                        end
+                        local result = ranch:setAnimalOwnedState('cows', 'true')
+                        if not result then
+                            VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
+                            return
+                        end
                         AnimalBoughtHandle(Config.RanchSetup.RanchAnimalSetup.Cows.Cost,
                             Config.Webhooks.AnimalBought.TitleText, Config.Webhooks.AnimalBought.DescText,
                             Config.Webhooks.AnimalBought.Cows, _source, ranchid, discord, character)
@@ -410,7 +428,16 @@ RegisterServerEvent('bcc-ranch:BuyAnimals', function(ranchid, animalType)
                 if #result > 0 then
                     if result[1].pigs == 'false' then
                         TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'pigs', _source)
-                        exports.oxmysql:execute('UPDATE ranch SET `pigs`="true" WHERE ranchid=@ranchid', param)
+                        local ranch = ServerRanchControllerInstance:getRanch(ranchid)
+                        if not ranch then
+                            VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
+                            return
+                        end
+                        local result = ranch:setAnimalOwnedState('pigs', 'true')
+                        if not result then
+                            VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
+                            return
+                        end
                         AnimalBoughtHandle(Config.RanchSetup.RanchAnimalSetup.Pigs.Cost,
                             Config.Webhooks.AnimalBought.TitleText, Config.Webhooks.AnimalBought.DescText,
                             Config.Webhooks.AnimalBought.Pigs, _source, ranchid, discord, character)
@@ -428,7 +455,16 @@ RegisterServerEvent('bcc-ranch:BuyAnimals', function(ranchid, animalType)
                 if #result > 0 then
                     if result[1].goats == 'false' then
                         TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'goats', _source)
-                        exports.oxmysql:execute('UPDATE ranch SET `goats`="true" WHERE ranchid=@ranchid', param)
+                        local ranch = ServerRanchControllerInstance:getRanch(ranchid)
+                        if not ranch then
+                            VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
+                            return
+                        end
+                        local result = ranch:setAnimalOwnedState('goats', 'true')
+                        if not result then
+                            VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
+                            return
+                        end
                         AnimalBoughtHandle(Config.RanchSetup.RanchAnimalSetup.Goats.Cost,
                             Config.Webhooks.AnimalBought.TitleText, Config.Webhooks.AnimalBought.DescText,
                             Config.Webhooks.AnimalBought.Goats, _source, ranchid, discord, character)
@@ -446,7 +482,16 @@ RegisterServerEvent('bcc-ranch:BuyAnimals', function(ranchid, animalType)
                 if #result > 0 then
                     if result[1].chickens == 'false' then
                         TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'chickens', _source)
-                        exports.oxmysql:execute('UPDATE ranch SET `chickens`="true" WHERE ranchid=@ranchid', param)
+                        local ranch = ServerRanchControllerInstance:getRanch(ranchid)
+                        if not ranch then
+                            VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
+                            return
+                        end
+                        local result = ranch:setAnimalOwnedState('chickens', 'true')
+                        if not result then
+                            VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
+                            return
+                        end
                         AnimalBoughtHandle(Config.RanchSetup.RanchAnimalSetup.Chickens.Cost,
                             Config.Webhooks.AnimalBought.TitleText, Config.Webhooks.AnimalBought.DescText,
                             Config.Webhooks.AnimalBought.Chickens, _source, ranchid, discord, character)

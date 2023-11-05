@@ -1,6 +1,5 @@
 ------------ Animals Wandering Setup --------------
 local cows, chickens, goats, pigs = {}, {}, {}, {}
-local ranchController = RanchController.new()
 local waitTicksBetweenWanderingDistanceChecks = 10000
 local spawnDistanceForWanderingAnimals = 250
 
@@ -10,11 +9,10 @@ local spawnWanderingAnimals
 local spawnRoamingPed
 
 local function initWanderingAnimals()
-    while not ranchController do
-        ranchController = RanchController.new()
-        Wait(1000)
+    while not RanchControllerInstance do
+        Wait(100)
     end
-    for _, ranch in pairs(ranchController:getListOfRanches()) do
+    for _, ranch in pairs(RanchControllerInstance:getListOfRanches()) do
         print(json.encode(ranch))
         handleWanderingAnimals(ranch)
     end
@@ -32,15 +30,23 @@ handleWanderingAnimals = function (ranch)
                 print(string.format('Player is within %s meters of ranch %s, spawning wandering animals. cows: %s, chickens: %s, goats: %s, pigs: %s', distance, ranch.ranchname, ranch.cows, ranch.chickens, ranch.goats, ranch.pigs))
                 if ranch.cows then
                     spawnWanderingAnimals('Cows', ranch)
+                else
+                    despawnWanderingAnimals('Cows', ranch)
                 end
                 if ranch.chickens then
                     spawnWanderingAnimals('Chickens', ranch)
+                else
+                    despawnWanderingAnimals('Chickens', ranch)
                 end
                 if ranch.goats then
                     spawnWanderingAnimals('Goats', ranch)
+                else
+                    despawnWanderingAnimals('Goats', ranch)
                 end
                 if ranch.pigs then
                     spawnWanderingAnimals('Pigs', ranch)
+                else
+                    despawnWanderingAnimals('Pigs', ranch)
                 end
             else
                 despawnWanderingAnimals('Cows', ranch)
@@ -110,7 +116,7 @@ AddEventHandler('onResourceStop', function(resourceName)
     if (GetCurrentResourceName() ~= resourceName) then
       return
     end
-    for _, ranch in pairs(ranchController:getListOfRanches()) do
+    for _, ranch in pairs(RanchControllerInstance:getListOfRanches()) do
         despawnWanderingAnimals('Cows', ranch)
         despawnWanderingAnimals('Chickens', ranch)
         despawnWanderingAnimals('Goats', ranch)

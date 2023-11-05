@@ -16,6 +16,15 @@ MiniGame = exports['bcc-minigames'].initiate()
 
 ClientRPC = exports.vorp_core:ClientRpcCall() --[[@as ClientRPC]] -- for intellisense
 
+RanchControllerInstance = nil --[[@type RanchController]]
+
+Citizen.CreateThread(function()
+  while not RanchControllerInstance do
+    RanchControllerInstance = RanchController.new()
+    Wait(2000)
+  end
+end)
+
 ----- Setting RelationShip ----
 function relationshipsetup(ped, relInt) --ped and player relationship setter, rail int is 1-5 1 being friend 5 being hate
   SetRelationshipBetweenGroups(relInt, GetPedRelationshipGroupHash(ped), joaat('PLAYER'))
