@@ -44,6 +44,8 @@ RegisterNetEvent('bcc-ranch:CowsWander', function(ranchId, ranchCoords, animalCo
 end)
 
 RegisterNetEvent('bcc-ranch:ChickensWander', function(ranchId, ranchCoords, animalCoords)
+    local ranchCoords = json.decode(ranchCoords)
+    local animalCoords = json.decode(animalCoords)
     if not chickens[ranchId] then
         chickens[ranchId] = {}
     end
@@ -72,6 +74,8 @@ RegisterNetEvent('bcc-ranch:ChickensWander', function(ranchId, ranchCoords, anim
 end)
 
 RegisterNetEvent('bcc-ranch:GoatsWander', function(ranchId, ranchCoords, animalCoords)
+    local ranchCoords = json.decode(ranchCoords)
+    local animalCoords = json.decode(animalCoords)
     if not goats[ranchId] then
         goats[ranchId] = {}
     end
@@ -100,6 +104,8 @@ RegisterNetEvent('bcc-ranch:GoatsWander', function(ranchId, ranchCoords, animalC
 end)
 
 RegisterNetEvent('bcc-ranch:PigsWander', function(ranchId, ranchCoords, animalCoords)
+    local ranchCoords = json.decode(ranchCoords)
+    local animalCoords = json.decode(animalCoords)
     if not pigs[ranchId] then
         pigs[ranchId] = {}
     end
