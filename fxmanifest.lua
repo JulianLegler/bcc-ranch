@@ -15,15 +15,18 @@ server_scripts {
     '@oxmysql/lib/MySQL.lua',
     'server/server.lua',
     'server/exports.lua',
-    'server/AdminMenu.lua'
+    'server/AdminMenu.lua',
+    'server/RanchDataModel.lua'
 }
 
 client_scripts {
     'client/functions.lua',
+    'client/RanchModel.lua',
+    'client/RanchController.lua',
     'client/menusetup/*.lua',
     'client/MainRanch.lua',
     'client/chores.lua',
-    'client/AnimalManager/*.lua'
+    'client/AnimalManager/*.lua',
 }
 
 dependency {

@@ -118,6 +118,7 @@ Config.RanchSetup = {
     FeedCooldown = 10800, -- wert: 60*60*2.5 seconds in between being able to feed animals
     RanchAnimalSetup = { --ranch animal setup
         Cows = {
+            Model = joaat('a_c_cow'),
             Health = 200, --How much health the cows will have while being herded or sold 
             AgeIncreaseTime = 3600000, --The time that has to pass before the animals age increases
             AgeIncreaseAmount = 1, --the amount the age will increase
@@ -149,6 +150,7 @@ Config.RanchSetup = {
             },
         },
         Pigs = {
+            Model = joaat('a_c_pig_01'),
             Health = 200, --How much health the pigs will have while being herded or sold
             AgeIncreaseTime = 3600000, --The time that has to pass before the animals age increases
             AgeIncreaseAmount = 2, --the amount the age will increase
@@ -179,6 +181,7 @@ Config.RanchSetup = {
             },
         },
         Goats = {
+            Model = joaat('A_C_Sheep_01'),
             Health = 200, --How much health the goats will have while being herded or sold
             AgeIncreaseTime = 3600000, --The time that has to pass before the animals age increases
             AgeIncreaseAmount = 2, --the amount the age will increase
@@ -210,6 +213,7 @@ Config.RanchSetup = {
             },
         },
         Chickens = {
+            Model = joaat('a_c_chicken_01'),
             Health = 200, --How much health the chickens will have while being herded or sold
             AgeIncreaseTime = 3600000, --The time that has to pass before the animals age increases
             AgeIncreaseAmount = 25, --the amount the age will increase
