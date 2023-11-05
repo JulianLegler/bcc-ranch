@@ -195,5 +195,17 @@ function RanchDataModel:setAnimalOwnedState(animalType, state)
     return true
 end
 
-
-
+--- changes the isherding state for the ranch in the db
+---@param state number
+---@return boolean
+function RanchDataModel:setIsHerding(state)
+    local result = MySQL.Sync.execute("UPDATE ranch SET isherding = @state WHERE ranchid = @ranchid", {['@state'] = state, ['@ranchid'] = self.ranchid})
+    if result == 0 then
+        print(string.format("RanchDataModel:setIsHerding() - Failed to update isherding state for ranch with ranchid %s", self.ranchid))
+        return false
+    end
+    self.isherding = state
+    print(string.format("RanchDataModel:setIsHerding() - Updated isherding state for ranch with ranchid %s", self.ranchid))
+    ServerRPC.Callback.TriggerAsync('bcc-ranch:ranchDataChanged', -1, function () end, self)
+    return true
+end

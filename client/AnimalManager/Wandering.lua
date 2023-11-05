@@ -13,7 +13,7 @@ local function initWanderingAnimals()
         Wait(100)
     end
     for _, ranch in pairs(RanchControllerInstance:getListOfRanches()) do
-        print(json.encode(ranch))
+        -- print(json.encode(ranch))
         handleWanderingAnimals(ranch)
     end
 end

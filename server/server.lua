@@ -588,26 +588,22 @@ RegisterServerEvent('bcc-ranch:AnimalsSoldHandler', function(payAmount, animalTy
         ['cows'] = function()
             discord:sendMessage(Config.Webhooks.AnimalSold.TitleText .. tostring(ranchid),
                 Config.Webhooks.AnimalSold.Sold .. Config.Webhooks.AnimalSold.Cows .. tostring(payAmount))
-            exports.oxmysql:execute(
-                'UPDATE ranch SET `cows`="false", `cows_cond`=0, `cows_age`=0 WHERE ranchid=@ranchid', param)
+            ServerRanchControllerInstance:getRanch(ranchid):setAnimalOwnedState('cows', 'false')
         end,
         ['chickens'] = function()
             discord:sendMessage(Config.Webhooks.AnimalSold.TitleText .. tostring(ranchid),
                 Config.Webhooks.AnimalSold.Sold .. Config.Webhooks.AnimalSold.Chickens .. tostring(payAmount))
-            exports.oxmysql:execute(
-                'UPDATE ranch SET `chickens`="false", `chickens_cond`=0, `chickens_age`=0 WHERE ranchid=@ranchid', param)
+            ServerRanchControllerInstance:getRanch(ranchid):setAnimalOwnedState('chickens', 'false')
         end,
         ['pigs'] = function()
             discord:sendMessage(Config.Webhooks.AnimalSold.TitleText .. tostring(ranchid),
                 Config.Webhooks.AnimalSold.Sold .. Config.Webhooks.AnimalSold.Pigs .. tostring(payAmount))
-            exports.oxmysql:execute(
-                'UPDATE ranch SET `pigs`="false", `pigs_cond`=0, `pigs_age`=0 WHERE ranchid=@ranchid', param)
+            ServerRanchControllerInstance:getRanch(ranchid):setAnimalOwnedState('pigs', 'false')
         end,
         ['goats'] = function()
             discord:sendMessage(Config.Webhooks.AnimalSold.TitleText .. tostring(ranchid),
                 Config.Webhooks.AnimalSold.Sold .. Config.Webhooks.AnimalSold.Goats .. tostring(payAmount))
-            exports.oxmysql:execute(
-                'UPDATE ranch SET `goats`="false", `goats_cond`=0, `goats_age`=0 WHERE ranchid=@ranchid', param)
+            ServerRanchControllerInstance:getRanch(ranchid):setAnimalOwnedState('goats', 'false')
         end
     }
 
