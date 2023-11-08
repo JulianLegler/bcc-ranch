@@ -46,4 +46,6 @@ ClientRPC.Callback.Register('bcc-ranch:ranchDataChanged', function (cb, ranchDat
     else
         table.insert(RanchController.ranchList, RanchModel.initFromRanchDataModel(ranchDataModel))
     end
+
+    TriggerEvent('bcc-ranch:ranchDataChangedClient', ranchDataModel.ranchid)
 end)

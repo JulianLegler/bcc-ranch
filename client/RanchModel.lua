@@ -24,6 +24,13 @@
 RanchModel = {}
 RanchModel.__index = RanchModel
 
+---@enum AnimalType @The type of animal
+AnimalType = {
+    Cows,
+    Pigs,
+    Chicken,
+    Goats
+}
 
 --- Get a RanchModel object from the database
 ---@param ranchid any
@@ -136,10 +143,16 @@ function RanchModel:isWanderingAnimalCurrentlySpawned(animalType)
     return false
 end
 
+--- get scale of animal based on age
+---@param animalType enum AnimalType
+---@return number
 function RanchModel:getAnimalScale(animalType)
     local maxPedScale = 1.2
     local minPedScale = 0.7
     local animalAge = self[string.lower(animalType) .. "_age"]
+    if animalAge > Config.RanchSetup.AnimalGrownAge then
+        animalAge = Config.RanchSetup.AnimalGrownAge
+    end
     local gradient = (maxPedScale - minPedScale) / Config.RanchSetup.AnimalGrownAge
     local animalSize = minPedScale + gradient * animalAge
     return animalSize

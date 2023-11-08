@@ -140,5 +140,29 @@ AddEventHandler('onResourceStop', function(resourceName)
     end
   end)
 
+local function updateAnimalScale(animalType, ranch)
+    local size = ranch:getAnimalScale(animalType)
+    print(string.format('[Wandering] Updating animal scale for %s to %s', animalType, size))
+    if not ranch.wanderingAnimals or not ranch.wanderingAnimals[animalType] then
+        return
+    end
+    for _, animalHandle in pairs(ranch.wanderingAnimals[animalType]) do
+        if DoesEntityExist(animalHandle) then
+            SetPedScale(animalHandle, size)
+        end
+    end
+end
+AddEventHandler('bcc-ranch:ranchDataChangedClient', function (ranchid)
+    local ranch = RanchControllerInstance:getRanch(ranchid)
+    if ranch then
+        updateAnimalScale('Cows', ranch)
+        updateAnimalScale('Chickens', ranch)
+        updateAnimalScale('Goats', ranch)
+        updateAnimalScale('Pigs', ranch)
+    else
+        print(string.format('[Wandering] Ranch %s not found', ranchid))
+    end
+end)
 
-  initWanderingAnimals()
+
+initWanderingAnimals()
