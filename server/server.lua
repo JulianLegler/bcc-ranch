@@ -369,21 +369,62 @@ RegisterServerEvent('bcc-ranch:ChoreCheckRanchCondition', function(ranchid, chor
     end
 end)
 
+ServerRPC.Callback.Register('bcc-ranch:doChore', function( source, cb, ranchId, chore)
+    local _source = source
+    local ranch = ServerRanchControllerInstance:getRanch(ranchId)
+    if not ranch then
+        cb(false)
+        return
+    end
+    local cooldownController = ranch:getCooldownController()
+    local isOnCooldown = cooldownController:isRanchInteractionOnCooldown(chore)
+
+    if isOnCooldown then
+        VORPcore.NotifyRightTip(_source, _U("TooSoon"), 4000)
+        print(string.format("Player %s tried to do chore %s too soon", _source, chore))
+        cb(false)
+        return 
+    end
+
+    local ranch = ServerRanchControllerInstance:getRanch(ranchId)
+    if not ranch then
+        cb(false)
+        return
+    end
+
+
+    if ranch.ranchCondition >= 100 then
+        VORPcore.NotifyRightTip(_source, _U("ConditionMax"), 4000)
+        cb(false)
+        return
+    end
+    
+    cooldownController:startRanchInteractionCooldown(chore)
+    TriggerClientEvent('bcc-ranch:startChore', _source, chore)
+
+end)
+
 ---- Event To Increase Ranch Condition Upon Chore Completion -----
 RegisterServerEvent('bcc-ranch:RanchConditionIncrease', function(increaseAmount, ranchid)
-    local param = { ['ranchid'] = ranchid, ['ConditionIncrease'] = increaseAmount }
-    exports.oxmysql:execute("UPDATE ranch SET `ranchCondition`=ranchCondition+@ConditionIncrease WHERE ranchid=@ranchid",
-        param)
+    local ranch = ServerRanchControllerInstance:getRanch(ranchid)
+    if not ranch then
+        return
+    end
+    local result = ranch:increaseRanchCondition(increaseAmount)
+
+    if not result then
+        VORPcore.NotifyRightTip(_source, "DB Update error. Desync state imminent.", 4000)
+    end
 end)
 
 ---- Event To Display Ranch Condition To Player -----
 RegisterServerEvent('bcc-ranch:DisplayRanchCondition', function(ranchid)
     local _source = source
-    local param = { ['ranchid'] = ranchid }
-    local result = MySQL.query.await("SELECT ranchCondition FROM ranch WHERE ranchid=@ranchid", param)
-    if #result > 0 then
-        VORPcore.NotifyRightTip(_source, tostring(result[1].ranchCondition), 4000)
+    local ranch = ServerRanchControllerInstance:getRanch(ranchid)
+    if not ranch then
+        return
     end
+    VORPcore.NotifyRightTip(_source, tostring(ranch.ranchCondition), 4000)
 end)
 
 ---- Buy Animals Event ----
@@ -614,27 +655,17 @@ end)
 
 ------ Raises animal cond upon herd success ------------
 RegisterServerEvent('bcc-ranch:AnimalCondIncrease', function(animalType, amounToInc, ranchid)
-    local param = { ['ranchid'] = ranchid, ['levelinc'] = amounToInc }
-
-    local condIncFuncts = {
-        ['cows'] = function()
-            exports.oxmysql:execute('UPDATE ranch SET `cows_cond`=cows_cond+@levelinc WHERE ranchid=@ranchid', param)
-        end,
-        ['chickens'] = function()
-            exports.oxmysql:execute('UPDATE ranch SET `chickens_cond`=chickens_cond+@levelinc WHERE ranchid=@ranchid',
-                param)
-        end,
-        ['pigs'] = function()
-            exports.oxmysql:execute('UPDATE ranch SET `pigs_cond`=pigs_cond+@levelinc WHERE ranchid=@ranchid', param)
-        end,
-        ['goats'] = function()
-            exports.oxmysql:execute('UPDATE ranch SET `goats_cond`=goats_cond+@levelinc WHERE ranchid=@ranchid', param)
-        end
-    }
-
-    if condIncFuncts[animalType] then
-        condIncFuncts[animalType]()
+    local ranch = ServerRanchControllerInstance:getRanch(ranchid)
+    if not ranch then
+        return
     end
+
+    local result = ranch:increaseAnimalCondition(animalType, amounToInc)
+
+    if not result then
+        print(string.format('Failed to increase animal condition for %s at ranch %s', animalType, ranchid))
+    end
+    
 end)
 
 -------- Remove Animals from db after butcher -------
@@ -673,13 +704,18 @@ end)
 
 ------ Decrease ranch cond over time ------------
 RegisterServerEvent('bcc-ranch:DecranchCondIncrease', function(ranchid)
-    local param = { ['ranchid'] = ranchid, ['levelinc'] = Config.RanchSetup.RanchCondDecreaseAmount }
-    local result = MySQL.query.await("SELECT ranchCondition from ranch WHERE ranchid=@ranchid", param)
-    if #result > 0 then
-        if result[1].ranchCondition > 0 then
-            exports.oxmysql:execute('UPDATE ranch SET `ranchCondition`=ranchCondition-@levelinc WHERE ranchid=@ranchid',
-                param)
-        end
+
+    local ranch = ServerRanchControllerInstance:getRanch(ranchid)
+    if not ranch then
+        print('Ranch cond decrease failed for ranch ' .. ranchid)
+        VORPcore.NotifyRightTip(_source, "DB Update error. Desync state imminent.", 4000)
+        return
+    end
+    local result = ranch:decreaseRanchCondition(Config.RanchSetup.RanchCondDecreaseAmount )
+
+    if not result then
+        print('Ranch cond decrease failed for ranch ' .. ranchid)
+        VORPcore.NotifyRightTip(_source, "DB Update error. Desync state imminent.", 4000)
     end
 end)
 
@@ -907,7 +943,79 @@ RegisterServerEvent('bcc-ranch:CowMilkingCooldown', function(ranchId)
     end
 end)
 
-local choreCooldowns = {} --Chore and feeding Cooldown
+
+ServerRPC.Callback.Register('bcc-ranch:feedAnimal', function(source, cb, ranchId, animal)
+    local _source = source
+
+    local ranch = ServerRanchControllerInstance:getRanch(ranchId)
+    if not ranch then
+        VORPcore.NotifyRightTip(_source, "Something went bad ...", 4000)
+        return
+    end
+
+    local cooldownController = ranch:getCooldownController()
+
+    local interaction = 'chore'
+    if feed then
+        interaction = 'feed'
+    end
+    local isOnCooldown = cooldownController:isAnimalFeedInteractionOnCooldown(animal)
+
+    if isOnCooldown then
+        VORPcore.NotifyRightTip(_source, _U("TooSoon"), 4000)
+        return
+    end
+
+    local result = exports.vorp_inventory:subItem(source, Config.RanchSetup.RanchAnimalSetup[animal].FoodItem, Config.RanchSetup.RanchAnimalSetup[animal].FoodAmount, nil)
+    if not result then
+        VORPcore.NotifyRightTip(_source, _U("NotEnoughFood"), 4000)
+        return
+    end
+
+    cooldownController:startAnimalFeedInteractionCooldown(animal)
+    TriggerClientEvent('bcc-ranch:FeedAnimals', _source, animal)
+
+end)
+
+ServerRPC.Callback.Register('bcc-ranch:doHerding', function(source, cb, ranchId, animalType)
+    local _source = source
+
+    local ranch = ServerRanchControllerInstance:getRanch(ranchId)
+    if not ranch then
+        VORPcore.NotifyRightTip(_source, "Something went bad ...", 4000)
+        print(string.format('ranchId %s not found', ranchId))
+        cb(false)
+        return
+    end
+
+    local cooldownController = ranch:getCooldownController()
+
+    local isOnCooldown = cooldownController:isHerdingInteractionOnCooldown(animalType)
+
+    if isOnCooldown then
+        VORPcore.NotifyRightTip(_source, _U("TooSoon"), 4000)
+        print(string.format('ranchId %s is on cooldown for herding %s', ranchId, animalType))
+        cb(false)
+        return
+    end
+
+
+    if ranch.isherding then
+        VORPcore.NotifyRightTip(_U("AnimalsOut"), 4000)
+        print(string.format('ranchId %s is already herding %s', ranchId, animalType))
+        cb(false)
+        return
+    end
+
+    ranch:setIsHerding(true)
+    TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, ranch.isherding)
+
+    cooldownController:startHerdingInteractionCooldown(animalType)
+    cb(true)
+
+end)
+
+--[[ local choreCooldowns = {} --Chore and feeding Cooldown
 RegisterServerEvent('bcc-ranch:ChoreCooldownSV', function(source,ranchId, feed, chore, animal)
     local _source = source
     local shopid = ranchId
@@ -956,7 +1064,7 @@ RegisterServerEvent('bcc-ranch:ChoreCooldownSV', function(source,ranchId, feed, 
             TriggerClientEvent('bcc-ranch:ShovelHay', _source, chore)
         end
     end
-end)
+end) ]]
 
 -- TODO: refactoring needed!
 -- Will reset isHerding to 0 if any player working at the ranch leaves the server even when others are still working.

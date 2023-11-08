@@ -139,7 +139,8 @@ function ChoreMenu(choreType)
                             if not Haycoords and Haycoords ~= 'none' then
                                 VORPcore.NotifyRightTip(_U("NoLocationSet"), 4000)
                             else
-                                TriggerServerEvent('bcc-ranch:ChoreCheckRanchCondition', RanchId, 'shovelhay')
+                                --TriggerServerEvent('bcc-ranch:ChoreCheckRanchCondition', RanchId, 'shovelhay')
+                                ClientRPC.Callback.TriggerAwait('bcc-ranch:doChore', RanchId, 'shovelhay')
                                 MenuData.CloseAll()
                             end
                         end,
@@ -147,7 +148,8 @@ function ChoreMenu(choreType)
                             if not WaterAnimalCoords and WaterAnimalCoords ~= 'none' then
                                 VORPcore.NotifyRightTip(_U("NoLocationSet"), 4000)
                             else
-                                TriggerServerEvent('bcc-ranch:ChoreCheckRanchCondition', RanchId, 'wateranimals')
+                                --TriggerServerEvent('bcc-ranch:ChoreCheckRanchCondition', RanchId, 'wateranimals')
+                                ClientRPC.Callback.TriggerAwait('bcc-ranch:doChore', RanchId, 'wateranimals')
                                 MenuData.CloseAll()
                             end
                         end,
@@ -155,7 +157,8 @@ function ChoreMenu(choreType)
                             if not RepairTroughCoords and RepairTroughCoords ~= 'none' then
                                 VORPcore.NotifyRightTip(_U("NoLocationSet"), 4000)
                             else
-                                TriggerServerEvent('bcc-ranch:ChoreCheckRanchCondition', RanchId, 'repairfeedtrough')
+                                -- TriggerServerEvent('bcc-ranch:ChoreCheckRanchCondition', RanchId, 'repairfeedtrough')
+                                ClientRPC.Callback.TriggerAwait('bcc-ranch:doChore', RanchId, 'repairfeedtrough')
                                 MenuData.CloseAll()
                             end
                         end,
@@ -163,7 +166,8 @@ function ChoreMenu(choreType)
                             if not ScoopPoopCoords and ScoopPoopCoords ~= 'none' then
                                 VORPcore.NotifyRightTip(_U("NoLocationSet"), 4000)
                             else
-                                TriggerServerEvent('bcc-ranch:ChoreCheckRanchCondition', RanchId, 'scooppoop')
+                                --TriggerServerEvent('bcc-ranch:ChoreCheckRanchCondition', RanchId, 'scooppoop')
+                                ClientRPC.Callback.TriggerAwait('bcc-ranch:doChore', RanchId, 'scooppoop')
                                 MenuData.CloseAll()
                             end
                         end

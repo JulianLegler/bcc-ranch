@@ -7,7 +7,8 @@ local hammerTimeCfg = {
 }
 
 ---- Chore Setup ----
-RegisterNetEvent('bcc-ranch:ShovelHay', function(chore)
+RegisterNetEvent('bcc-ranch:startChore', function(chore)
+    print(string.format("startChore - chore: %s", chore))
     local choreCoords,choreAnim,incAmount,animTime,miniGame,miniGameCfg
 
     local selectedChoreFunc = {

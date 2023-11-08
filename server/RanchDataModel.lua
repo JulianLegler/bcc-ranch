@@ -32,58 +32,17 @@
 ---@field ledger number
 ---@field isherding number
 ---@field job string
+---@field getCooldownController function
+---@field increaseRanchCondition function
+---@field decreaseRanchCondition function
+---@field increaseAnimalCondition function
+
 
 
 RanchDataModel = {}
 RanchDataModel.__index = RanchDataModel
 
 
-
---[[
-CREATE TABLE `ranch` (
-	`charidentifier` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
-	`ranchcoords` LONGTEXT NOT NULL COLLATE 'utf8mb4_general_ci',
-	`ranchname` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_general_ci',
-	`ranch_radius_limit` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_general_ci',
-	`ranchid` INT(11) NOT NULL AUTO_INCREMENT,
-	`ranchCondition` INT(10) NOT NULL DEFAULT '0',
-	`cows` VARCHAR(50) NOT NULL DEFAULT 'false' COLLATE 'utf8mb4_general_ci',
-	`cows_cond` INT(10) NOT NULL DEFAULT '0',
-	`pigs` VARCHAR(50) NOT NULL DEFAULT 'false' COLLATE 'utf8mb4_general_ci',
-	`pigs_cond` INT(10) NOT NULL DEFAULT '0',
-	`chickens` VARCHAR(50) NOT NULL DEFAULT 'false' COLLATE 'utf8mb4_general_ci',
-	`chickens_cond` INT(10) NOT NULL DEFAULT '0',
-	`goats` VARCHAR(50) NOT NULL DEFAULT 'false' COLLATE 'utf8mb4_general_ci',
-	`goats_cond` INT(10) NOT NULL DEFAULT '0',
-	`cows_age` INT(10) NULL DEFAULT '0',
-	`chickens_age` INT(10) NULL DEFAULT '0',
-	`goats_age` INT(10) NULL DEFAULT '0',
-	`pigs_age` INT(10) NULL DEFAULT '0',
-	`chicken_coop` VARCHAR(50) NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`chicken_coop_coords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`shovehaycoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`wateranimalcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`repairtroughcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`scooppoopcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`herdlocation` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`pigcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`cowcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`chickencoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`goatcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`wagonfeedcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	`ledger` INT(10) NULL DEFAULT '0',
-	`isherding` INT(10) NULL DEFAULT '0',
-	`taxamount` INT(10) NULL DEFAULT '0',
-	`job` VARCHAR(50) NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
-	PRIMARY KEY (`ranchid`) USING BTREE,
-	UNIQUE INDEX `charidentifier` (`charidentifier`) USING BTREE
-)
-COLLATE='utf8mb4_general_ci'
-ENGINE=InnoDB
-AUTO_INCREMENT=6
-;
-
-]]
 
 --- RanchDataModel.get - Get a RanchDataModel object from the database
 ---@param ranchid number - The ranchid of the ranch to get
@@ -94,6 +53,7 @@ function RanchDataModel.get(ranchid)
     if not self:initRanchFromDB() then
         return nil
     end
+    self.cooldownController = CooldownController.init(self.ranchid)
     return self
 end
 
@@ -155,7 +115,7 @@ function RanchDataModel:initRanchFromDB()
     self.goatcoords = handleVectorFromDB(ranch.goatcoords) or {}
     self.wagonfeedcoords = handleVectorFromDB(ranch.wagonfeedcoords) or {}
     self.ledger = ranch.ledger
-    self.isherding = ranch.isherding
+    self.isherding = handleBoolean(ranch.isherding)
     self.taxamount = ranch.taxamount
     self.job = ranch.job
     return true
@@ -207,5 +167,49 @@ function RanchDataModel:setIsHerding(state)
     self.isherding = state
     print(string.format("RanchDataModel:setIsHerding() - Updated isherding state for ranch with ranchid %s", self.ranchid))
     ServerRPC.Callback.TriggerAsync('bcc-ranch:ranchDataChanged', -1, function () end, self)
+    return true
+end
+
+--- returns the cooldown controller for the ranch
+---@return CooldownController - the cooldown controller
+function RanchDataModel:getCooldownController()
+    return self.cooldownController
+end
+
+function RanchDataModel:increaseRanchCondition(increaseAmount)
+    local result = MySQL.Sync.execute("UPDATE ranch SET ranchCondition = ranchCondition + @increaseAmount WHERE ranchid = @ranchid", {['@increaseAmount'] = increaseAmount, ['@ranchid'] = self.ranchid})
+    if result == 0 then
+        print(string.format("RanchDataModel:increaseRanchCondition() - Failed to increase ranch condition for ranch with ranchid %s", self.ranchid))
+        return false
+    end
+    self.ranchCondition = self.ranchCondition + increaseAmount
+    print(string.format("RanchDataModel:increaseRanchCondition() - Increased ranch condition for ranch with ranchid %s", self.ranchid))
+    return true
+end
+
+function RanchDataModel:decreaseRanchCondition(decreaseAmount)
+    if self.ranchCondition - decreaseAmount < 0 then
+        decreaseAmount = self.ranchCondition
+    end
+    local result = MySQL.Sync.execute("UPDATE ranch SET ranchCondition = ranchCondition - @decreaseAmount WHERE ranchid = @ranchid", {['@decreaseAmount'] = decreaseAmount, ['@ranchid'] = self.ranchid})
+    if result == 0 then
+        print(string.format("RanchDataModel:decreaseRanchCondition() - Failed to decrease ranch condition for ranch with ranchid %s", self.ranchid))
+        return false
+    end
+    self.ranchCondition = self.ranchCondition - decreaseAmount
+    print(string.format("RanchDataModel:decreaseRanchCondition() - Decreased ranch condition for ranch with ranchid %s", self.ranchid))
+    return true
+end
+
+function RanchDataModel:increaseAnimalCondition(animalType, increaseAmount)
+    local animalType = string.lower(animalType)
+    local fieldName = animalType .. '_cond'
+    local result = MySQL.Sync.execute("UPDATE ranch SET " .. fieldName .. " = " .. fieldName .. " + @increaseAmount WHERE ranchid = @ranchid", {['@increaseAmount'] = increaseAmount, ['@ranchid'] = self.ranchid})
+    if result == 0 then
+        print(string.format("RanchDataModel:increaseAnimalCondition() - Failed to increase animal %s condition for ranch with ranchid %s", animalType, self.ranchid))
+        return false
+    end
+    self[fieldName] = self[fieldName] + increaseAmount
+    print(string.format("RanchDataModel:increaseAnimalCondition() - Increased %s condition for ranch with ranchid %s", animalType, self.ranchid))
     return true
 end

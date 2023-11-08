@@ -6,12 +6,6 @@ local vehicle
 
 local ClientRPC = exports.vorp_core:ClientRpcCall() --[[@as ClientRPC]] -- for intellisense
 
-local function isEnoughFoodInStorage(animalConfig)
-    local foodNeeded = animalConfig.FoodAmount
-    local item = animalConfig.FoodItem
-    local result = ClientRPC.Callback.TriggerAwait('bcc-ranch:removeFroodFromInventoryIfAvailable', item, foodNeeded)
-    return result
-end
 
 RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
     InMission = true
@@ -20,7 +14,7 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
     feedPeds = {} --Feedpeds is set to nil when the mission is over or player dies to empty the table, this sets it from nil to table allowing this to work again (if it is not set nil when the mission is over or failed it will fail the mission the next time you do one)
 
     local selectAnimalFuncts = {
-        ['cows'] = function()
+        ['Cows'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Cows
             model = 'a_c_cow'
             eatAnim = joaat("WORLD_ANIMAL_COW_EATING_GROUND")
@@ -29,7 +23,7 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
                 scale = 0.5
             end
         end,
-        ['chickens'] = function()
+        ['Chickens'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Chickens
             model = 'a_c_chicken_01'
             eatAnim = joaat("WORLD_ANIMAL_CHICKEN_EATING")
@@ -38,7 +32,7 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
                 scale = 0.5
             end
         end,
-        ['goats'] = function()
+        ['Goats'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Goats
             model = 'A_C_Sheep_01'
             spawnCoords = Goatcoords
@@ -47,7 +41,7 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
                 scale = 0.5
             end
         end,
-        ['pigs'] = function()
+        ['Pigs'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Pigs
             model = 'a_c_pig_01'
             spawnCoords = Pigcoords
@@ -59,12 +53,6 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
     }
     if selectAnimalFuncts[animalType] then
         selectAnimalFuncts[animalType]()
-    end
-
-    if not isEnoughFoodInStorage(tables) then
-        VORPcore.NotifyRightTip(_U("FeedAnimalsNotEnoughFood"), 8000)
-        InMission = false
-        return
     end
 
     amount = tables.AmountSpawned

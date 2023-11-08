@@ -16,6 +16,7 @@ server_scripts {
     'server/server.lua',
     'server/exports.lua',
     'server/AdminMenu.lua',
+    'server/CooldownController.lua',
     'server/RanchDataModel.lua',
     'server/ServerRanchController.lua',
 }

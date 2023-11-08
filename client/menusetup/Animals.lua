@@ -359,14 +359,7 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                 end,
                 ['herdanimal'] = function()
                     if Herdlocation ~= nil and Herdlocation ~= 'none' then
-                        TriggerServerEvent('bcc-ranch:CheckAnimalsOut', RanchId)
-                        Wait(250)
-                        if IsAnimalOut == 0 then
-                            MenuData.CloseAll()
-                            herdanimals(herdType, ranchCond)
-                        else
-                            VORPcore.NotifyRightTip(_U("AnimalsOut"), 4000)
-                        end
+                        herdanimals(herdType, ranchCond)
                     else
                         VORPcore.NotifyRightTip(_U("NoLocationSet"), 4000)
                     end
@@ -491,7 +484,8 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                                 if Pigcoords ~= nil and Pigcoords ~= 'none' then
                                     if CanFeed then
                                         MenuData.CloseAll()
-                                        TriggerServerEvent('bcc-ranch:ChoreCooldownSV', GetPlayerServerId(PlayerId()),RanchId, true, nil, 'pigs')
+                                        --TriggerServerEvent('bcc-ranch:ChoreCooldownSV', GetPlayerServerId(PlayerId()),RanchId, true, nil, 'pigs')
+                                        ClientRPC.Callback.TriggerAwait('bcc-ranch:feedAnimal', RanchId, 'Pigs')
                                     else
                                         VORPcore.NotifyRightTip(_U("AnimalsOut"), 4000)
                                     end
@@ -503,7 +497,8 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                                 if Goatcoords ~= nil and Goatcoords ~= 'none' then
                                     if CanFeed then
                                         MenuData.CloseAll()
-                                        TriggerServerEvent('bcc-ranch:ChoreCooldownSV',GetPlayerServerId(PlayerId()), RanchId, true, nil, 'goats')
+                                        --TriggerServerEvent('bcc-ranch:ChoreCooldownSV',GetPlayerServerId(PlayerId()), RanchId, true, nil, 'goats')
+                                        ClientRPC.Callback.TriggerAwait('bcc-ranch:feedAnimal', RanchId, 'Goats')
                                     else
                                         VORPcore.NotifyRightTip(_U("AnimalsOut"), 4000)
                                     end
@@ -515,7 +510,9 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                                 if Chickencoords and Chickencoords ~= 'none' then
                                     if CanFeed then
                                         MenuData.CloseAll()
-                                        TriggerServerEvent('bcc-ranch:ChoreCooldownSV',GetPlayerServerId(PlayerId()), RanchId, true, nil, 'chickens')
+                                        --TriggerServerEvent('bcc-ranch:ChoreCooldownSV',GetPlayerServerId(PlayerId()), RanchId, true, nil, 'chickens')
+                                        ClientRPC.Callback.TriggerAwait('bcc-ranch:feedAnimal', RanchId, 'Chickens')
+
                                     else
                                         VORPcore.NotifyRightTip(_U("AnimalsOut"), 4000)
                                     end
@@ -527,7 +524,8 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                                 if Cowcoords and Cowcoords ~= 'none' then
                                     if CanFeed then
                                         MenuData.CloseAll()
-                                        TriggerServerEvent('bcc-ranch:ChoreCooldownSV',GetPlayerServerId(PlayerId()), RanchId, true, nil, 'cows')
+                                        --TriggerServerEvent('bcc-ranch:ChoreCooldownSV',GetPlayerServerId(PlayerId()), RanchId, true, nil, 'cows')
+                                        ClientRPC.Callback.TriggerAwait('bcc-ranch:feedAnimal', RanchId, 'Cows')
                                     else
                                         VORPcore.NotifyRightTip(_U("AnimalsOut"), 4000)
                                     end

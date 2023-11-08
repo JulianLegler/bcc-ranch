@@ -7,6 +7,16 @@ function herdanimals(animalType, ranchCond)
     InMission = true
     TriggerEvent('bcc-ranch:ChoreDeadCheck')
 
+    local result = ClientRPC.Callback.TriggerAwait('bcc-ranch:doHerding', RanchId, animalType)
+
+    print(string.format("herdanimals() - ClientRPC.Callback.TriggerAwait('bcc-ranch:doHerding', RanchId, animalType) returned %s", result))
+
+    if not result then
+        return
+    end
+
+    MenuData.CloseAll()
+
     local selectAnimalFuncts = {
         ['cows'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Cows
