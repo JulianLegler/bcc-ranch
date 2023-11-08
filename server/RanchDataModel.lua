@@ -139,6 +139,10 @@ function handleBoolean(value)
     return false
 end
 
+function RanchDataModel:dataChanged()
+    ServerRPC.Callback.TriggerAsync('bcc-ranch:ranchDataChanged', -1, function () end, self)
+end
+
 --- changes the animal owned state for the ranch in the db
 ---@param animalType string
 ---@param state string - 'true' or 'false'
@@ -151,7 +155,7 @@ function RanchDataModel:setAnimalOwnedState(animalType, state)
     end
     self[animalType] = handleBoolean(state)
     print(string.format("RanchDataModel:setAnimalOwnedState() - Updated %s state for ranch with ranchid %s", animalType, self.ranchid))
-    ServerRPC.Callback.TriggerAsync('bcc-ranch:ranchDataChanged', -1, function () end, self)
+    self:dataChanged()
     return true
 end
 
@@ -166,7 +170,7 @@ function RanchDataModel:setIsHerding(state)
     end
     self.isherding = state
     print(string.format("RanchDataModel:setIsHerding() - Updated isherding state for ranch with ranchid %s", self.ranchid))
-    ServerRPC.Callback.TriggerAsync('bcc-ranch:ranchDataChanged', -1, function () end, self)
+    self:dataChanged()
     return true
 end
 
@@ -184,6 +188,7 @@ function RanchDataModel:increaseRanchCondition(increaseAmount)
     end
     self.ranchCondition = self.ranchCondition + increaseAmount
     print(string.format("RanchDataModel:increaseRanchCondition() - Increased ranch condition for ranch with ranchid %s", self.ranchid))
+    self:dataChanged()
     return true
 end
 
@@ -198,6 +203,7 @@ function RanchDataModel:decreaseRanchCondition(decreaseAmount)
     end
     self.ranchCondition = self.ranchCondition - decreaseAmount
     print(string.format("RanchDataModel:decreaseRanchCondition() - Decreased ranch condition for ranch with ranchid %s", self.ranchid))
+    self:dataChanged()
     return true
 end
 
@@ -211,5 +217,20 @@ function RanchDataModel:increaseAnimalCondition(animalType, increaseAmount)
     end
     self[fieldName] = self[fieldName] + increaseAmount
     print(string.format("RanchDataModel:increaseAnimalCondition() - Increased %s condition for ranch with ranchid %s", animalType, self.ranchid))
+    self:dataChanged()
+    return true
+end
+
+function RanchDataModel:increaseAnimalAge(animalType, increaseAmount)
+    local animalType = string.lower(animalType)
+    local fieldName = animalType .. '_age'
+    local result = MySQL.Sync.execute("UPDATE ranch SET " .. fieldName .. " = " .. fieldName .. " + @increaseAmount WHERE ranchid = @ranchid", {['@increaseAmount'] = increaseAmount, ['@ranchid'] = self.ranchid})
+    if result == 0 then
+        print(string.format("RanchDataModel:increaseAnimalAge() - Failed to increase animal %s age for ranch with ranchid %s", animalType, self.ranchid))
+        return false
+    end
+    self[fieldName] = self[fieldName] + increaseAmount
+    print(string.format("RanchDataModel:increaseAnimalAge() - Increased %s age for ranch with ranchid %s", animalType, self.ranchid))
+    self:dataChanged()
     return true
 end

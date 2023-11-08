@@ -11,6 +11,11 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
     InMission = true
     local tables, model, spawnCoords, eatAnim
     local scale = nil
+    local ranch = RanchControllerInstance:getRanch(RanchId)
+    if not ranch then
+        error(string.format("ButcherAnimals() - RanchControllerInstance:getRanch(RanchId) returned nil"))
+        return
+    end
     feedPeds = {} --Feedpeds is set to nil when the mission is over or player dies to empty the table, this sets it from nil to table allowing this to work again (if it is not set nil when the mission is over or failed it will fail the mission the next time you do one)
 
     local selectAnimalFuncts = {
@@ -18,8 +23,8 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
             tables = Config.RanchSetup.RanchAnimalSetup.Cows
             model = 'a_c_cow'
             eatAnim = joaat("WORLD_ANIMAL_COW_EATING_GROUND")
-            spawnCoords = Cowcoords
-            if Cowsage < Config.RanchSetup.AnimalGrownAge then
+            spawnCoords = ranch.cowcoords
+            if ranch.cows_age < Config.RanchSetup.AnimalGrownAge then
                 scale = 0.5
             end
         end,
@@ -27,26 +32,26 @@ RegisterNetEvent('bcc-ranch:FeedAnimals', function(animalType)
             tables = Config.RanchSetup.RanchAnimalSetup.Chickens
             model = 'a_c_chicken_01'
             eatAnim = joaat("WORLD_ANIMAL_CHICKEN_EATING")
-            spawnCoords = Chickencoords
-            if Chickensage < Config.RanchSetup.AnimalGrownAge then
+            spawnCoords = ranch.chickencoords
+            if ranch.chickens_age < Config.RanchSetup.AnimalGrownAge then
                 scale = 0.5
             end
         end,
         ['Goats'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Goats
             model = 'A_C_Sheep_01'
-            spawnCoords = Goatcoords
+            spawnCoords = ranch.goatcoords
             eatAnim = joaat("PROP_ANIMAL_GOAT_EAT_TROUGH")
-            if Goatsage < Config.RanchSetup.AnimalGrownAge then
+            if ranch.goats_age < Config.RanchSetup.AnimalGrownAge then
                 scale = 0.5
             end
         end,
         ['Pigs'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Pigs
             model = 'a_c_pig_01'
-            spawnCoords = Pigcoords
+            spawnCoords = ranch.pigcoords
             eatAnim = joaat("WORLD_ANIMAL_PIG_EAT_CARCASS")
-            if Pigsage < Config.RanchSetup.AnimalGrownAge then
+            if ranch.pigs_age < Config.RanchSetup.AnimalGrownAge then
                 scale = 0.5
             end
         end

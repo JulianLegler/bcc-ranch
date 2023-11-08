@@ -1,10 +1,15 @@
 local createdPed = nil
 function ButcherAnimals(animalType)
     local model, tables, spawnCoords, isTooYoung
+    local ranch = RanchControllerInstance:getRanch(RanchId)
+    if not ranch then
+        error(string.format("ButcherAnimals() - RanchControllerInstance:getRanch(RanchId) returned nil"))
+        return
+    end
     TriggerEvent('bcc-ranch:ChoreDeadCheck')
     local selectAnimalFuncts = {
         ['cows'] = function()
-            if Cowsage < Config.RanchSetup.AnimalGrownAge then
+            if ranch.cows_age < Config.RanchSetup.AnimalGrownAge then
                 isTooYoung = true
                 VORPcore.NotifyRightTip(_U("TooYoung"), 4000) return
             end
@@ -13,7 +18,7 @@ function ButcherAnimals(animalType)
             spawnCoords = Cowcoords
         end,
         ['chickens'] = function()
-            if Chickensage < Config.RanchSetup.AnimalGrownAge then
+            if ranch.chickens_age < Config.RanchSetup.AnimalGrownAge then
                 isTooYoung = true
                 VORPcore.NotifyRightTip(_U("TooYoung"), 4000) return
             end
@@ -22,7 +27,7 @@ function ButcherAnimals(animalType)
             spawnCoords = Chickencoords
         end,
         ['goats'] = function()
-            if Goatsage < Config.RanchSetup.AnimalGrownAge then
+            if ranch.goats_age < Config.RanchSetup.AnimalGrownAge then
                 isTooYoung = true
                 VORPcore.NotifyRightTip(_U("TooYoung"), 4000) return
             end
@@ -31,7 +36,7 @@ function ButcherAnimals(animalType)
             spawnCoords = Goatcoords
         end,
         ['pigs'] = function()
-            if Pigsage < Config.RanchSetup.AnimalGrownAge then
+            if ranch.pigs_age < Config.RanchSetup.AnimalGrownAge then
                 isTooYoung = true
                 VORPcore.NotifyRightTip(_U("TooYoung"), 4000) return
             end

@@ -441,7 +441,7 @@ RegisterServerEvent('bcc-ranch:BuyAnimals', function(ranchid, animalType)
                 local result = MySQL.query.await("SELECT cows FROM ranch WHERE ranchid=@ranchid", param)
                 if #result > 0 then
                     if result[1].cows == 'false' then
-                        TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'cows', _source)
+                        --TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'cows', _source)
                         local ranch = ServerRanchControllerInstance:getRanch(ranchid)
                         if not ranch then
                             VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
@@ -468,7 +468,7 @@ RegisterServerEvent('bcc-ranch:BuyAnimals', function(ranchid, animalType)
                 local result = MySQL.query.await("SELECT pigs FROM ranch WHERE ranchid=@ranchid", param)
                 if #result > 0 then
                     if result[1].pigs == 'false' then
-                        TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'pigs', _source)
+                        --TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'pigs', _source)
                         local ranch = ServerRanchControllerInstance:getRanch(ranchid)
                         if not ranch then
                             VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
@@ -495,7 +495,7 @@ RegisterServerEvent('bcc-ranch:BuyAnimals', function(ranchid, animalType)
                 local result = MySQL.query.await("SELECT goats FROM ranch WHERE ranchid=@ranchid", param)
                 if #result > 0 then
                     if result[1].goats == 'false' then
-                        TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'goats', _source)
+                        --TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'goats', _source)
                         local ranch = ServerRanchControllerInstance:getRanch(ranchid)
                         if not ranch then
                             VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
@@ -522,7 +522,7 @@ RegisterServerEvent('bcc-ranch:BuyAnimals', function(ranchid, animalType)
                 local result = MySQL.query.await("SELECT chickens FROM ranch WHERE ranchid=@ranchid", param)
                 if #result > 0 then
                     if result[1].chickens == 'false' then
-                        TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'chickens', _source)
+                        --TriggerEvent('bcc-ranch:IndAnimalAgeStart', 'chickens', _source)
                         local ranch = ServerRanchControllerInstance:getRanch(ranchid)
                         if not ranch then
                             VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
@@ -815,7 +815,7 @@ RegisterServerEvent('bcc-ranch:WanderingSetup', function(ranchid)
 end)
 
 ---------- Ageing Setup -----------------------
-RegisterServerEvent('bcc-ranch:AgeCheck', function(ranchid)
+--[[ RegisterServerEvent('bcc-ranch:AgeCheck', function(ranchid)
     local _source = source
     local param = { ['ranchid'] = ranchid }
     local result = MySQL.query.await("SELECT * FROM ranch WHERE ranchid=@ranchid", param)
@@ -833,9 +833,9 @@ RegisterServerEvent('bcc-ranch:AgeCheck', function(ranchid)
             TriggerClientEvent('bcc-ranch:PigsAgeing', _source, result[1].pigs_age)
         end
     end
-end)
+end) ]]
 
-AddEventHandler('bcc-ranch:IndAnimalAgeStart', function(animalType, _source)
+--[[ AddEventHandler('bcc-ranch:IndAnimalAgeStart', function(animalType, _source)
     if animalType == 'cows' then
         TriggerClientEvent('bcc-ranch:CowsAgeing', _source, 0)
     end
@@ -848,7 +848,7 @@ AddEventHandler('bcc-ranch:IndAnimalAgeStart', function(animalType, _source)
     if animalType == 'pigs' then
         TriggerClientEvent('bcc-ranch:PigsAgeing', _source, 0)
     end
-end)
+end) ]]
 
 RegisterServerEvent('bcc-ranch:AgeIncrease', function(animalType, ranchid)
     print('Age Increase')

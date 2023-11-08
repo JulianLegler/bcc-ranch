@@ -9,6 +9,7 @@ function ServerRanchController.new()
     local self = setmetatable({}, ServerRanchController)
     self.ranchList = {}
     self:loadAllRanches()
+    self:initAgeing()
     return self
 end
 
@@ -55,3 +56,31 @@ ServerRPC.Callback.Register('bcc-ranch:getAllRanchData', function(source, cb)
     end
     cb(ServerRanchControllerInstance:getListOfRanches())
 end)
+
+function ServerRanchController:initAgeing()
+    for _, ranch in pairs(self.ranchList) do
+        self:handleAgeing(ranch)
+        print(string.format("ServerRanchController:initAgeing - initialised ageing for ranchid: %s", ranch.ranchid))
+    end
+end
+
+function ServerRanchController:handleAgeing(ranch)
+    for animal, animalConfig in pairs(Config.RanchSetup.RanchAnimalSetup) do
+        Citizen.CreateThread(function ()
+            while true do 
+                Wait(animalConfig.AgeIncreaseTime)
+                if ranch[string.lower(animal)] then
+                
+                    local result = ranch:increaseAnimalAge(animal, animalConfig.AgeIncreaseAmount)
+
+                    if not result then
+                        print(string.format("ServerRanchController:handleAgeing - increaseAnimalAge returned false for animal: %s, ranchid: %s", animal, ranch.ranchid))
+                        return
+                    end
+
+                    print(string.format("ServerRanchController:handleAgeing - increased animal: %s, ranchid: %s, new age: %s", animal, ranch.ranchid, ranch[string.lower(animal)..'_age']))
+                end
+            end
+        end)
+    end
+end

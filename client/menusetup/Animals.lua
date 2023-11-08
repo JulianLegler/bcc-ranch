@@ -51,28 +51,24 @@ function BuyAnimalMenu()
             local MenuApiSelection = {
                 ['buycows'] = function()
                     BoughtCows = false
-                    Cowsage = 0
                     Wait(200)
                     BoughtCows = true
                     TriggerServerEvent('bcc-ranch:BuyAnimals', RanchId, 'cows')
                 end,
                 ['buypigs'] = function()
                     BoughtPigs = false
-                    Pigsage = 0
                     Wait(200)
                     BoughtPigs = true
                     TriggerServerEvent('bcc-ranch:BuyAnimals', RanchId, 'pigs')
                 end,
                 ['buychickens'] = function()
                     BoughtChickens = false
-                    Chickensage = 0
                     Wait(200)
                     BoughtChickens = true
                     TriggerServerEvent('bcc-ranch:BuyAnimals', RanchId, 'chickens')
                 end,
                 ['buygoats'] = function()
                     BoughtGoats = false
-                    Goatsage = 0
                     Wait(200)
                     BoughtGoats = true
                     TriggerServerEvent('bcc-ranch:BuyAnimals', RanchId, 'goats')

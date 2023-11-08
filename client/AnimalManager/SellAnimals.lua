@@ -6,41 +6,47 @@ function SellAnimals(animalType, animalCond)
     local tables, model
     local spawnCoords = nil
 
+    local ranch = RanchControllerInstance:getRanch(RanchId)
+    if not ranch then
+        error(string.format("ButcherAnimals() - RanchControllerInstance:getRanch(RanchId) returned nil"))
+        return
+    end
+
     local selectAnimalFuncts = {
         ['cows'] = function()
-            if Cowsage < Config.RanchSetup.AnimalGrownAge then
+            if ranch.cows_age < Config.RanchSetup.AnimalGrownAge then
                 VORPcore.NotifyRightTip(_U("TooYoung"), 4000)
             else
                 tables = Config.RanchSetup.RanchAnimalSetup.Cows
                 model = 'a_c_cow'
-                spawnCoords = Cowcoords
+                spawnCoords = ranch.cowcoords
             end
         end,
         ['chickens'] = function()
-            if Chickensage < Config.RanchSetup.AnimalGrownAge then
+            if ranch.chickens_age < Config.RanchSetup.AnimalGrownAge then
                 VORPcore.NotifyRightTip(_U("TooYoung"), 4000)
             else
                 tables = Config.RanchSetup.RanchAnimalSetup.Chickens
                 model = 'a_c_chicken_01'
-                spawnCoords = Chickencoords
+                spawnCoords = ranch.chickencoords
             end
         end,
         ['goats'] = function()
-            if Goatsage < Config.RanchSetup.AnimalGrownAge then
+            if ranch.goats_age < Config.RanchSetup.AnimalGrownAge then
                 VORPcore.NotifyRightTip(_U("TooYoung"), 4000)
             else
                 tables = Config.RanchSetup.RanchAnimalSetup.Goats
                 model = 'A_C_Sheep_01'
-                spawnCoords = Goatcoords
+                spawnCoords = ranch.goatcoords
             end
         end,
         ['pigs'] = function()
-            if Pigsage < Config.RanchSetup.AnimalGrownAge then
+            if ranch.pigs_age < Config.RanchSetup.AnimalGrownAge then
                 VORPcore.NotifyRightTip(_U("TooYoung"), 4000)
             else
                 tables = Config.RanchSetup.RanchAnimalSetup.Pigs
                 model = 'a_c_pig_01'
-                spawnCoords = Pigcoords
+                spawnCoords = ranch.pigcoords
             end
         end
     }

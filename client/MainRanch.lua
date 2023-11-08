@@ -42,7 +42,7 @@ RegisterNetEvent('bcc-ranch:HasRanchHandler', function(ranch)
     ChickenCoop = ranch.chicken_coop
     ChickenCoop_coords = json.decode(ranch.chicken_coop_coords)
     TriggerEvent('bcc-ranch:StartCondDec')
-    TriggerServerEvent('bcc-ranch:AgeCheck', RanchId)
+    --TriggerServerEvent('bcc-ranch:AgeCheck', RanchId)
     -- added by Little Creek
     -- coords needed for Wandering.lua
     Cowcoords = json.decode(ranch.cowcoords)

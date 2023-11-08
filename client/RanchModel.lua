@@ -19,6 +19,7 @@
 ---@field chickens_age number
 ---@field goats_age number
 ---@field wanderingAnimals table[]
+---@field getAnimalScale function
 
 RanchModel = {}
 RanchModel.__index = RanchModel
@@ -133,4 +134,13 @@ function RanchModel:isWanderingAnimalCurrentlySpawned(animalType)
         return true
     end
     return false
+end
+
+function RanchModel:getAnimalScale(animalType)
+    local maxPedScale = 1.2
+    local minPedScale = 0.7
+    local animalAge = self[string.lower(animalType) .. "_age"]
+    local gradient = (maxPedScale - minPedScale) / Config.RanchSetup.AnimalGrownAge
+    local animalSize = minPedScale + gradient * animalAge
+    return animalSize
 end

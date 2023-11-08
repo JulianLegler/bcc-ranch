@@ -17,34 +17,32 @@ function herdanimals(animalType, ranchCond)
 
     MenuData.CloseAll()
 
+    local ranch = RanchControllerInstance:getRanch(RanchId)
+    if not ranch then
+        error(string.format("ButcherAnimals() - RanchControllerInstance:getRanch(RanchId) returned nil"))
+        return
+    end
+
     local selectAnimalFuncts = {
         ['cows'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Cows
             model = 'a_c_cow'
-            if Cowsage < Config.RanchSetup.AnimalGrownAge then
-                scale = 0.5
-            end
+            scale = ranch:getAnimalScale(animalType)
         end,
         ['chickens'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Chickens
             model = 'a_c_chicken_01'
-            if Chickensage < Config.RanchSetup.AnimalGrownAge then
-                scale = 0.5
-            end
+            scale = ranch:getAnimalScale(animalType)
         end,
         ['goats'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Goats
             model = 'A_C_Sheep_01'
-            if Goatsage < Config.RanchSetup.AnimalGrownAge then
-                scale = 0.5
-            end
+            scale = ranch:getAnimalScale(animalType)
         end,
         ['pigs'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Pigs
             model = 'a_c_pig_01'
-            if Pigsage < Config.RanchSetup.AnimalGrownAge then
-                scale = 0.5
-            end
+            scale = ranch:getAnimalScale(animalType)
         end
     }
     if selectAnimalFuncts[animalType] then
