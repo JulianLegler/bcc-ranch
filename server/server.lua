@@ -79,24 +79,34 @@ CreateThread(function() --Tax handling
 end)
 
 --------- Check is herding --------------
-RegisterServerEvent('bcc-ranch:CheckAnimalsOut', function(RanchId)
+RegisterServerEvent('bcc-ranch:CheckAnimalsOut', function(ranchId)
     local _source = source
-    local param = { ['RanchId'] = RanchId }
 
-    local result = MySQL.query.await("SELECT isherding FROM ranch WHERE ranchid=@RanchId", param)
-    local isherding = result[1].isherding
-    if isherding > 0 then
-        TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, isherding)
+    local ranch = ServerRanchControllerInstance:getRanch(ranchId)
+
+    if not ranch then
+        print(string.format("['bcc-ranch:CheckAnimalsOut'] Ranch %s not found", ranchId))
+        return
+    end
+    
+    if ranch.isherding > 0 then
+        TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, ranch.isherding)
     else
-        exports.oxmysql:execute("UPDATE ranch SET isherding = 1 WHERE ranchid=@RanchId", param)
-        TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, isherding)
+        TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, ranch.isherding)
+        ranch.setIsHerding(true)
     end
 end)
 
 --------- Put Animals Back --------------
 RegisterServerEvent('bcc-ranch:PutAnimalsBack', function(RanchId)
-    local param = { ['RanchId'] = RanchId }
-    exports.oxmysql:execute("UPDATE ranch SET isherding = 0 WHERE ranchid=@RanchId", param)
+    local ranch = ServerRanchControllerInstance:getRanch(ranchId)
+
+    if not ranch then
+        print(string.format("['bcc-ranch:PutAnimalsBack'] Ranch %s not found", ranchId))
+        return
+    end
+
+    ranch:setIsHerding(false)
 end)
 
 --------- Open Inv Handler --------------

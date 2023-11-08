@@ -1,3 +1,61 @@
+/*
+    CREATE TABLE `ranch` (
+	`charidentifier` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`ranchcoords` LONGTEXT NOT NULL COLLATE 'utf8mb4_general_ci',
+	`ranchname` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`ranch_radius_limit` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`ranchid` INT(11) NOT NULL AUTO_INCREMENT,
+	`ranchCondition` INT(10) NOT NULL DEFAULT '0',
+	`cows` VARCHAR(50) NOT NULL DEFAULT 'false' COLLATE 'utf8mb4_general_ci',
+	`cows_cond` INT(10) NOT NULL DEFAULT '0',
+	`pigs` VARCHAR(50) NOT NULL DEFAULT 'false' COLLATE 'utf8mb4_general_ci',
+	`pigs_cond` INT(10) NOT NULL DEFAULT '0',
+	`chickens` VARCHAR(50) NOT NULL DEFAULT 'false' COLLATE 'utf8mb4_general_ci',
+	`chickens_cond` INT(10) NOT NULL DEFAULT '0',
+	`goats` VARCHAR(50) NOT NULL DEFAULT 'false' COLLATE 'utf8mb4_general_ci',
+	`goats_cond` INT(10) NOT NULL DEFAULT '0',
+	`cows_age` INT(10) NULL DEFAULT '0',
+	`chickens_age` INT(10) NULL DEFAULT '0',
+	`goats_age` INT(10) NULL DEFAULT '0',
+	`pigs_age` INT(10) NULL DEFAULT '0',
+	`wateranimalcoords` LONGTEXT NOT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`chicken_coop` VARCHAR(50) NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`chicken_coop_coords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`shovehaycoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`repairtroughcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`scooppoopcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`herdlocation` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`pigcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`cowcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`chickencoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`goatcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`wagonfeedcoords` LONGTEXT NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`ledger` INT(10) NULL DEFAULT '0',
+	`isherding` INT(10) NULL DEFAULT '0',
+	`taxamount` INT(10) NULL DEFAULT '0',
+	`job` VARCHAR(50) NULL DEFAULT 'none' COLLATE 'utf8mb4_general_ci',
+	`shovelhay_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	`repairtrough_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	`scooppoop_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	`wateranimal_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	`feed_pigs_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	`feed_cows_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	`feed_chickens_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	`feed_goats_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	`herd_pigs_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	`herd_cows_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	`herd_chickens_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	`herd_goats_timestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	PRIMARY KEY (`ranchid`) USING BTREE,
+	UNIQUE INDEX `charidentifier` (`charidentifier`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=6
+;
+*/
+
+
 CREATE TABLE IF NOT EXISTS `ranch` (
     `charidentifier` varchar(50) NOT NULL,
     `ranchcoords` LONGTEXT NOT NULL,
@@ -40,3 +98,16 @@ ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`ledger` INT(10) DEFAULT 0);
 ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`isherding` INT(10) DEFAULT 0);
 ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`taxamount` INT(10) DEFAULT 0);
 ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`job` varchar(50) DEFAULT 'none');
+
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`shovelhay_timestamp` TIMESTAMP DEFAULT current_timestamp());
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`repairtrough_timestamp` TIMESTAMP DEFAULT current_timestamp());
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`scooppoop_timestamp` TIMESTAMP DEFAULT current_timestamp());
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`wateranimal_timestamp` TIMESTAMP DEFAULT current_timestamp());
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`feed_pigs_timestamp` TIMESTAMP DEFAULT current_timestamp());
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`feed_cows_timestamp` TIMESTAMP DEFAULT current_timestamp());
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`feed_chickens_timestamp` TIMESTAMP DEFAULT current_timestamp());
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`feed_goats_timestamp` TIMESTAMP DEFAULT current_timestamp());
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`herd_pigs_timestamp` TIMESTAMP DEFAULT current_timestamp());
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`herd_cows_timestamp` TIMESTAMP DEFAULT current_timestamp());
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`herd_chickens_timestamp` TIMESTAMP DEFAULT current_timestamp());
+ALTER TABLE `ranch` ADD COLUMN IF NOT EXISTS (`herd_goats_timestamp` TIMESTAMP DEFAULT current_timestamp());

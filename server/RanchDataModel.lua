@@ -36,6 +36,7 @@
 ---@field increaseRanchCondition function
 ---@field decreaseRanchCondition function
 ---@field increaseAnimalCondition function
+---@field setIsHerding function
 
 
 
