@@ -89,7 +89,7 @@ RegisterServerEvent('bcc-ranch:CheckAnimalsOut', function(ranchId)
         return
     end
     
-    if ranch.isherding > 0 then
+    if ranch.isherding then
         TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, ranch.isherding)
     else
         TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, ranch.isherding)
