@@ -98,7 +98,7 @@ RegisterServerEvent('bcc-ranch:CheckAnimalsOut', function(ranchId)
 end)
 
 --------- Put Animals Back --------------
-RegisterServerEvent('bcc-ranch:PutAnimalsBack', function(RanchId)
+RegisterServerEvent('bcc-ranch:PutAnimalsBack', function(ranchId)
     local ranch = ServerRanchControllerInstance:getRanch(ranchId)
 
     if not ranch then
