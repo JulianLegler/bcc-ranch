@@ -2,6 +2,7 @@ local peds = {}
 
 ------ This is the herding function to increase animal cond -----
 function herdanimals(animalType, ranchCond)
+    local peds = {}
     local pl, scale = PlayerPedId(), nil
     local model, tables
     InMission = true
@@ -149,6 +150,7 @@ function herdanimals(animalType, ranchCond)
     TriggerServerEvent('bcc-ranch:PutAnimalsBack',RanchId)
 
     DelPedsForTable(peds)
+    peds = {}
     InMission = false
 end
 
