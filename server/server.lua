@@ -93,7 +93,7 @@ RegisterServerEvent('bcc-ranch:CheckAnimalsOut', function(ranchId)
         TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, ranch.isherding)
     else
         TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, ranch.isherding)
-        ranch.setIsHerding(true)
+        ranch:setIsHerding(true)
     end
 end)
 
