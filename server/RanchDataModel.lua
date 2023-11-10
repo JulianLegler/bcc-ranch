@@ -30,7 +30,7 @@
 ---@field herdlocation table
 ---@field wagonfeedcoords table
 ---@field ledger number
----@field isherding number
+---@field isherding boolean
 ---@field job string
 ---@field getCooldownController function
 ---@field increaseRanchCondition function

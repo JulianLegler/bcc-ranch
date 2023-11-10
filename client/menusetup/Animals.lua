@@ -1,6 +1,6 @@
 ----- Variabless -----
-Cowcoords, Chickencoords, Goatcoords, Pigcoords, Herdlocation, FeedWagonLocation, BoughtCows, BoughtChickens, BoughtGoats, BoughtPigs, IsAnimalOut, CanFeed, CanSell =
-    nil, nil, nil, nil, nil, nil, true, true, true, true, nil, false, false
+Cowcoords, Chickencoords, Goatcoords, Pigcoords, Herdlocation, FeedWagonLocation, BoughtCows, BoughtChickens, BoughtGoats, BoughtPigs, IsAnimalOut, CanSell =
+    nil, nil, nil, nil, nil, nil, true, true, true, true, nil, false
 
 ------ Buy Animals Menu --------
 function BuyAnimalMenu()
@@ -317,6 +317,10 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
             lastmenu = 'ManageOwnedAnimalsMenu'
         },
         function(data)
+            local ranch = RanchControllerInstance:getRanch(RanchId)
+            if not ranch then
+                print('Ranch not found when trying to open ManageOwnedAnimalsMenu')
+            end
             if data.current == 'backup' then
                 _G[data.trigger]()
             end
@@ -464,21 +468,21 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                     print('feedanimal menu clicked')
 
                     if FeedWagonLocation then
-
-                        TriggerServerEvent('bcc-ranch:CheckAnimalsOut', RanchId)
+                        local canFeed = false
+                       --[[  TriggerServerEvent('bcc-ranch:CheckAnimalsOut', RanchId)
                         print('feedanimal CheckAnimalsOut')
                         Wait(250)
-                        print('feedanimal IsAnimalOut has to be 0 after 250 ticks: ' .. tostring(IsAnimalOut))
-                        if IsAnimalOut == 0 then
+                        print('feedanimal IsAnimalOut has to be 0 after 250 ticks: ' .. tostring(IsAnimalOut)) ]]
+                        if not ranch.isherding then
                             MenuData.CloseAll()
-                            CanFeed = true
+                            canFeed = true
                         end
-                        print('feedanimal CanFeed should be true now: ' .. tostring(CanFeed))
+                        print('feedanimal CanFeed should be true now: ' .. tostring(canFeed))
                         
                         local feedAnimalSelected = {
                             ['pigs'] = function()
                                 if Pigcoords ~= nil and Pigcoords ~= 'none' then
-                                    if CanFeed then
+                                    if canFeed then
                                         MenuData.CloseAll()
                                         --TriggerServerEvent('bcc-ranch:ChoreCooldownSV', GetPlayerServerId(PlayerId()),RanchId, true, nil, 'pigs')
                                         ClientRPC.Callback.TriggerAwait('bcc-ranch:feedAnimal', RanchId, 'Pigs')
@@ -491,7 +495,7 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                             end,
                             ['goats'] = function()
                                 if Goatcoords ~= nil and Goatcoords ~= 'none' then
-                                    if CanFeed then
+                                    if canFeed then
                                         MenuData.CloseAll()
                                         --TriggerServerEvent('bcc-ranch:ChoreCooldownSV',GetPlayerServerId(PlayerId()), RanchId, true, nil, 'goats')
                                         ClientRPC.Callback.TriggerAwait('bcc-ranch:feedAnimal', RanchId, 'Goats')
@@ -504,7 +508,7 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                             end,
                             ['chickens'] = function()
                                 if Chickencoords and Chickencoords ~= 'none' then
-                                    if CanFeed then
+                                    if canFeed then
                                         MenuData.CloseAll()
                                         --TriggerServerEvent('bcc-ranch:ChoreCooldownSV',GetPlayerServerId(PlayerId()), RanchId, true, nil, 'chickens')
                                         ClientRPC.Callback.TriggerAwait('bcc-ranch:feedAnimal', RanchId, 'Chickens')
@@ -518,7 +522,7 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                             end,
                             ['cows'] = function()
                                 if Cowcoords and Cowcoords ~= 'none' then
-                                    if CanFeed then
+                                    if canFeed then
                                         MenuData.CloseAll()
                                         --TriggerServerEvent('bcc-ranch:ChoreCooldownSV',GetPlayerServerId(PlayerId()), RanchId, true, nil, 'cows')
                                         ClientRPC.Callback.TriggerAwait('bcc-ranch:feedAnimal', RanchId, 'Cows')

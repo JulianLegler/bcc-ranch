@@ -92,7 +92,7 @@ RegisterServerEvent('bcc-ranch:CheckAnimalsOut', function(ranchId)
     if ranch.isherding then
         TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, ranch.isherding)
     else
-        TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, ranch.isherding)
+        TriggerClientEvent('bcc-ranch:AnimalsOutCl', _source, false)
         ranch:setIsHerding(true)
     end
 end)
@@ -983,6 +983,7 @@ ServerRPC.Callback.Register('bcc-ranch:feedAnimal', function(source, cb, ranchId
     end
 
     cooldownController:startAnimalFeedInteractionCooldown(animal)
+    ranch:setIsHerding(true)
     TriggerClientEvent('bcc-ranch:FeedAnimals', _source, animal)
 
 end)
