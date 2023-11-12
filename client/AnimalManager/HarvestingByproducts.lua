@@ -98,6 +98,7 @@ RegisterNetEvent('bcc-ranch:MilkCows', function()
     TriggerEvent('bcc-ranch:ChoreDeadCheck')
     VORPcore.NotifyRightTip(_U("goMilk"), 4000)
     createdPed = BccUtils.Ped.CreatePed(model, Cowcoords.x, Cowcoords.y, Cowcoords.z - 1, true, true, false)
+    Citizen.InvokeNative(0x9587913B9E772D29, createdPed, false) -- PlaceEntityOnGroundProperly
     FreezeEntityPosition(createdPed, true)
     local cc = GetEntityCoords(createdPed)
     local PromptGroup = VORPutils.Prompts:SetupPromptGroup()
