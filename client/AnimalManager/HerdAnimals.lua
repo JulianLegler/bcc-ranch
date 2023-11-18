@@ -4,7 +4,7 @@ local peds = {}
 function herdanimals(animalType, ranchCond)
     peds = {}
     local pl, scale = PlayerPedId(), nil
-    local model, tables
+    local model, tables, coords
     InMission = true
     TriggerEvent('bcc-ranch:ChoreDeadCheck')
 
@@ -29,21 +29,25 @@ function herdanimals(animalType, ranchCond)
             tables = Config.RanchSetup.RanchAnimalSetup.Cows
             model = 'a_c_cow'
             scale = ranch:getAnimalScale(animalType)
+            coords = ranch.cowcoords
         end,
         ['chickens'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Chickens
             model = 'a_c_chicken_01'
             scale = ranch:getAnimalScale(animalType)
+            coords = ranch.chickencoords
         end,
         ['goats'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Goats
             model = 'A_C_Sheep_01'
             scale = ranch:getAnimalScale(animalType)
+            coords = ranch.goatcoords
         end,
         ['pigs'] = function()
             tables = Config.RanchSetup.RanchAnimalSetup.Pigs
             model = 'a_c_pig_01'
             scale = ranch:getAnimalScale(animalType)
+            coords = ranch.pigcoords
         end
     }
     if selectAnimalFuncts[animalType] then
@@ -52,7 +56,7 @@ function herdanimals(animalType, ranchCond)
 
     local catch, plc = 0, GetEntityCoords(pl)
     repeat
-        local createdPed = BccUtils.Ped.CreatePed(model, plc.x + math.random(1, 5), plc.y + math.random(1, 5), plc.z, true, true, false)
+        local createdPed = BccUtils.Ped.CreatePed(model, coords.x + math.random(1, 5), coords.y + math.random(1, 5), coords.z, true, true, false)
         SetBlockingOfNonTemporaryEvents(createdPed, true)
         Citizen.InvokeNative(0x9587913B9E772D29, createdPed, true)
         if scale ~= nil then
