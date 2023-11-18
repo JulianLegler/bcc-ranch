@@ -55,6 +55,12 @@ function SellAnimals(animalType, animalCond)
         selectAnimalFuncts[animalType]()
     end
     if spawnCoords == nil then return end --used to end the sell here if the age is below the needed amount
+    local result = ClientRPC.Callback.TriggerAwait('bcc-ranch:setIsHerding', ranch, true)
+    if not result then
+        print("SellAnimals() - ClientRPC.Callback.TriggerAwait('bcc-ranch:setIsHerding', ranch, true) returned false")
+        return
+    end
+
     InMission = true
 
     --Detecting Closest Sale Barn Setup Credit to vorp_core for this bit of code, and jannings for pointing this out to me

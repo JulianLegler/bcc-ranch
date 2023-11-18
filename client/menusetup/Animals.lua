@@ -320,6 +320,7 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
             local ranch = RanchControllerInstance:getRanch(RanchId)
             if not ranch then
                 print('Ranch not found when trying to open ManageOwnedAnimalsMenu')
+                return
             end
             if data.current == 'backup' then
                 _G[data.trigger]()
@@ -365,9 +366,9 @@ RegisterNetEvent('bcc-ranch:OwnedAnimalManagerMenu', function(animalCond, animal
                     end
                 end,
                 ['sellanimal'] = function()
-                    TriggerServerEvent('bcc-ranch:CheckAnimalsOut', RanchId)
-                    Wait(250)
-                    if IsAnimalOut == 0 then
+                    --TriggerServerEvent('bcc-ranch:CheckAnimalsOut', RanchId)
+                    --Wait(250)
+                    if not ranch.isherding then
                         MenuData.CloseAll()
                         CanSell = true
                     end

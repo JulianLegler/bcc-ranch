@@ -623,6 +623,12 @@ end)
 
 ----- Event that will pay player and delete thier animals from db upon sell ------
 RegisterServerEvent('bcc-ranch:AnimalsSoldHandler', function(payAmount, animalType, ranchid)
+    local ranch = ServerRanchControllerInstance:getRanch(ranchid)
+    if not ranch then
+        VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
+        return
+    end
+
     local param = { ['ranchid'] = ranchid }
     local discord = BccUtils.Discord.setup(Config.Webhooks.AnimalSold.WebhookLink, 'BCC Ranch',
         'https://i.imgur.com/vLy5jKH.png')
@@ -631,30 +637,34 @@ RegisterServerEvent('bcc-ranch:AnimalsSoldHandler', function(payAmount, animalTy
     local result = MySQL.query.await("SELECT * FROM ranch WHERE ranchid=@ranchid", param)
     if #result > 0 then
         ledger = result[1].ledger
-        exports.ghmattimysql:execute("UPDATE ranch SET ledger=@1 WHERE ranchid=@id",
+        local result = MySQL.Sync.execute("UPDATE ranch SET ledger=@1 WHERE ranchid=@id",
             { ["@id"] = ranchid, ["@1"] = ledger + tonumber(payAmount) })
+        if not result then
+            VORPcore.NotifyRightTip(_source, _U("Failed"), 4000)
+            return
+        end
     end
 
     local soldFuncts = {
         ['cows'] = function()
             discord:sendMessage(Config.Webhooks.AnimalSold.TitleText .. tostring(ranchid),
                 Config.Webhooks.AnimalSold.Sold .. Config.Webhooks.AnimalSold.Cows .. tostring(payAmount))
-            ServerRanchControllerInstance:getRanch(ranchid):setAnimalOwnedState('cows', 'false')
+           ranch:setAnimalOwnedState('cows', 'false')
         end,
         ['chickens'] = function()
             discord:sendMessage(Config.Webhooks.AnimalSold.TitleText .. tostring(ranchid),
                 Config.Webhooks.AnimalSold.Sold .. Config.Webhooks.AnimalSold.Chickens .. tostring(payAmount))
-            ServerRanchControllerInstance:getRanch(ranchid):setAnimalOwnedState('chickens', 'false')
+                ranch:setAnimalOwnedState('chickens', 'false')
         end,
         ['pigs'] = function()
             discord:sendMessage(Config.Webhooks.AnimalSold.TitleText .. tostring(ranchid),
                 Config.Webhooks.AnimalSold.Sold .. Config.Webhooks.AnimalSold.Pigs .. tostring(payAmount))
-            ServerRanchControllerInstance:getRanch(ranchid):setAnimalOwnedState('pigs', 'false')
+                ranch:setAnimalOwnedState('pigs', 'false')
         end,
         ['goats'] = function()
             discord:sendMessage(Config.Webhooks.AnimalSold.TitleText .. tostring(ranchid),
                 Config.Webhooks.AnimalSold.Sold .. Config.Webhooks.AnimalSold.Goats .. tostring(payAmount))
-            ServerRanchControllerInstance:getRanch(ranchid):setAnimalOwnedState('goats', 'false')
+                ranch:setAnimalOwnedState('goats', 'false')
         end
     }
 

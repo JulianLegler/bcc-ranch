@@ -37,6 +37,7 @@
 ---@field decreaseRanchCondition function
 ---@field increaseAnimalCondition function
 ---@field setIsHerding function
+---@field setAnimalOwnedState function
 
 
 
@@ -149,12 +150,14 @@ end
 ---@param state string - 'true' or 'false'
 ---@return boolean - true if successful, false if not
 function RanchDataModel:setAnimalOwnedState(animalType, state)
-    local result = MySQL.Sync.execute("UPDATE ranch SET " .. animalType .. " = @state WHERE ranchid = @ranchid", {['@state'] = state, ['@ranchid'] = self.ranchid})
+    local result = MySQL.Sync.execute("UPDATE ranch SET " .. animalType .. " = @state, " .. animalType .. "_age = 0, " .. animalType .. "_cond = 0  WHERE ranchid = @ranchid", {['@state'] = state, ['@ranchid'] = self.ranchid})
     if result == 0 then
         print(string.format("RanchDataModel:setAnimalOwnedState() - Failed to update %s state for ranch with ranchid %s", animalType, self.ranchid))
         return false
     end
     self[animalType] = handleBoolean(state)
+    self[animalType .. '_age'] = 0
+    self[animalType .. '_cond'] = 0
     print(string.format("RanchDataModel:setAnimalOwnedState() - Updated %s state for ranch with ranchid %s", animalType, self.ranchid))
     self:dataChanged()
     return true

@@ -84,3 +84,19 @@ function ServerRanchController:handleAgeing(ranch)
         end)
     end
 end
+
+---comment
+---@param source number
+---@param cb fun(data: any)
+---@param ranch RanchModel
+---@param isHerding boolean
+ServerRPC.Callback.Register('bcc-ranch:setIsHerding', function (source, cb, ranch, isHerding)
+    local ranch = ServerRanchControllerInstance:getRanch(ranch.ranchid)
+    if not ranch then
+        print(string.format("ServerRanchController:setIsHerding - ranchid: %s not found", ranchid))
+        cb(false)
+        return
+    end
+    ranch:setIsHerding(isHerding)
+    cb(true)
+end)
