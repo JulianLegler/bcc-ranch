@@ -2,7 +2,7 @@ local peds = {}
 
 ------ This is the herding function to increase animal cond -----
 function herdanimals(animalType, ranchCond)
-    local peds = {}
+    peds = {}
     local pl, scale = PlayerPedId(), nil
     local model, tables
     InMission = true
