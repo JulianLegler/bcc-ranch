@@ -1104,9 +1104,11 @@ AddEventHandler('playerDropped', function()
     local ranch = MySQL.query.await(sqlString, select_ranchid_param )
 
     if ranch and #ranch > 0 and tonumber(ranch[1].ranchid) > 0 then
-        local update_ranch_param = { ranchid = ranch[1].ranchid }
-        --print("update_ranch_param: " .. update_ranch_param)
-        MySQL.query.await("UPDATE ranch SET `isherding`=0 WHERE ranchid=@ranchid", update_ranch_param )
+        local ranchObject = ServerRanchControllerInstance:getRanch(ranch[1].ranchid)
+        if not ranchObject then
+            print(string.format('[playerDropped] ranchId %s not found', ranch[1].ranchid))
+         end
+         ranchObject:setIsHerding(false)
     end
 end)
 
